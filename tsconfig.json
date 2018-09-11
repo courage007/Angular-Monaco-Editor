@@ -16,4 +16,10 @@
       "dom"
     ]
   }
+  // ,
+  // // 不采用这种方式（无法直接链接到源码，不便于调试）
+  // "include": [
+  //   "node_modules2/monaco-editor/monaco.d.ts"
+  // ]
+
 }
