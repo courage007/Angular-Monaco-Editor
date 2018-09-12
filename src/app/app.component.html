@@ -1,8 +1,11 @@
 <h2>自定义代码编辑器</h2>
+<div class="editor">
+    <angular-monaco-editor [(ngModel)] = "code"></angular-monaco-editor>
+</div>
+<!-- <div class="editor">
+    <angular-monaco-editor [options]="options" [(ngModel)]="code"></angular-monaco-editor>
+</div> -->
 
-<angular-monaco-editor [options]="options" [(ngModel)]="code" (onInit)="onInit($event)"></angular-monaco-editor>
-<!-- <angular-monaco-editor *ngIf="showMultiple" [options]="options" [(ngModel)]="code"></angular-monaco-editor>
-
-<pre>{{code | json}}</pre>
-
-<angular-monaco-editor [options]="options" [model]="model"></angular-monaco-editor> -->
+<p>Data in the app: {{code}}</p>
+<button (click)="setCode()">Set code in the app component</button>
+<!-- <angular-monaco-editor [options]="options" [model]="model"></angular-monaco-editor> -->

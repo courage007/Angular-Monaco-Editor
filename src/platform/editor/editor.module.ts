@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 
-
-import { ModuleWithProviders, NgModule } from '@angular/core';import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from './config';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+// import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from './config';
 import { AngularMonacoEditorComponent } from './angular-monaco-editor/angular-monaco-editor.component';
 
 @NgModule({
@@ -17,12 +17,12 @@ import { AngularMonacoEditorComponent } from './angular-monaco-editor/angular-mo
 })
 
 export class AngularMonacoEditorModule {
-  public static forRoot(config: AngularMonacoEditorConfig = {}): ModuleWithProviders {
-    return {
-      ngModule: AngularMonacoEditorModule,
-      providers: [
-        { provide: ANGULAR_MONACO_EDITOR_CONFIG, useValue: config }
-      ]
-    };
-  }
+//   public static forRoot(config: AngularMonacoEditorConfig = {}): ModuleWithProviders {
+//     return {
+//       ngModule: AngularMonacoEditorModule,
+//       providers: [
+//         { provide: ANGULAR_MONACO_EDITOR_CONFIG, useValue: config }
+//       ]
+//     };
+//   }
 }
