@@ -8,7 +8,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import * as monaco from 'monaco-editor';//npm install monaco-editor后，通过import方式引用它  
 
-// import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
+import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 
 // import { AngularEditorModel } from '../types';
 
@@ -43,18 +43,18 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   // @Output() onInit = new EventEmitter<any>();
 
-  // @Input('options')
-  // set options(options: any) {
-  //   // 默认options + 自定义options
-  //   this._options = Object.assign({}, this.config.defaultOptions, options);
-  //   if (this._editor) {
-  //     this._editor.dispose();
-  //     this.initMonaco(options);
-  //   }
-  // }
-  // get options(): any {
-  //   return this._options;
-  // }
+  @Input('options')
+  set options(options: any) {
+    // 默认options + 自定义options
+    this._options = Object.assign({}, this.config.defaultOptions, options);
+    if (this._editor) {
+      this._editor.dispose();
+      this.initMonaco(options);
+    }
+  }
+  get options(): any {
+    return this._options;
+  }
 
   // @Input('model')
   // set model(model: AngularEditorModel) {
@@ -65,12 +65,13 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   //   }
   // }
 
-  constructor(/* private zone: NgZone,  @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig */) {
+  // 注入AngularMonacoEditorConfig，在创建Editor实例时设置config
+  constructor(/*private zone: NgZone, */ @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig) {
 
   }
 
   ngAfterViewInit(): void {
-    this.initMonaco();
+    this.initMonaco(this.options);
   }
 
   // ngOnDestroy() {
@@ -83,7 +84,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   //   }
   // }
 
-  protected initMonaco(/*options: any*/): void {
+  protected initMonaco(options: any): void {
     console.log("Init the custom monaco code editor.");
 
     // const hasModel = !!options.model;
@@ -92,7 +93,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     //   options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
     // }
 
-    this._editor = monaco.editor.create(this._editorComponent.nativeElement, null);
+    this._editor = monaco.editor.create(this._editorComponent.nativeElement, this.options);
 
     // if (!hasModel) {
     //   this._editor.setValue(this._value);
