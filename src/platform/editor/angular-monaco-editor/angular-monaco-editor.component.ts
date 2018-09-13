@@ -6,14 +6,14 @@ import { Subscription } from 'rxjs';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import * as monaco from 'monaco-editor';//npm install monaco-editor后，通过import方式引用它  
+// import * as monaco from 'monaco-editor'; //npm install monaco-editor后，通过import方式引用它  
 
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 
 // import { AngularEditorModel } from '../types';
 
-// let loadedMonaco: boolean = false;
-// let loadPromise: Promise<void>;
+let loadedMonaco: boolean = false;
+let loadPromise: Promise<void>;
 // declare const require: any;
 
 // 自定义输入控件:1.封装ControlValueAccessor
@@ -71,7 +71,43 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   }
 
   ngAfterViewInit(): void {
-    this.initMonaco(this.options);
+    if (loadedMonaco) {
+      // Wait until monaco editor is available
+      loadPromise.then(() => {
+        this.initMonaco(this.options);
+      });
+    } else {
+      loadedMonaco = true;
+      loadPromise = new Promise<void>((resolve: any) => {
+        const baseUrl = this.config.baseUrl || '/assets';
+        // if (typeof((<any>window).monaco) === 'object') {
+        //   resolve();
+        //   return;
+        // }
+        const onGotAmdLoader: any = () => {
+          // Load monaco
+          (<any>window).require.config({ paths: { 'vs': `${baseUrl}/monaco/vs` } });
+          (<any>window).require(['vs/editor/editor.main'], () => {
+            if (typeof this.config.onMonacoLoad === 'function') {
+              this.config.onMonacoLoad();
+            }
+            this.initMonaco(this.options);
+            resolve();
+          });
+        };
+
+        // Load AMD loader if necessary
+        if (!(<any>window).require) {
+          const loaderScript: HTMLScriptElement = document.createElement('script');
+          loaderScript.type = 'text/javascript';
+          loaderScript.src = `${baseUrl}/monaco/vs/loader.js`;
+          loaderScript.addEventListener('load', onGotAmdLoader);
+          document.body.appendChild(loaderScript);
+        } else {
+          onGotAmdLoader();
+        }
+      });
+    }
   }
 
   // ngOnDestroy() {
@@ -88,16 +124,17 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     console.log("Init the custom monaco code editor.");
 
     // const hasModel = !!options.model;
+    const hasModel = false;
 
     // if (hasModel) {
     //   options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
     // }
 
-    this._editor = monaco.editor.create(this._editorComponent.nativeElement, this.options);
+    this._editor = monaco.editor.create(this._editorComponent.nativeElement, options);
 
-    // if (!hasModel) {
-    //   this._editor.setValue(this._value);
-    // }
+    if (!hasModel) {
+      this._editor.setValue(this._value);
+    }
 
     this._editor.onDidChangeModelContent((e: any) => {
       this.value = this._editor.getValue();

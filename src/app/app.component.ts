@@ -12,7 +12,8 @@ export class AppComponent {
 
   showMultiple = true;
   options = {
-    theme: 'vs-dark'
+    theme: 'vs-dark',
+    language: 'javascript',
   };
   
   setCode(){
