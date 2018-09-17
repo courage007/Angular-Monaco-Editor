@@ -17,7 +17,7 @@ export class AppComponent {
   };
   
   setCode(){
-    this.code = 'successssssssssssssssssssssssssssss';
+    this.code = 'Code changed from the app component.';
   }
 
   //todo: 替换成动态数据（通过服务获取的外部数据）
@@ -55,10 +55,8 @@ export class AppComponent {
   }
 
   updateOptions() {
-      this.code = this.jsCode;
-    }
-
-  // }
+    this.code = this.jsCode;
+  }
 
   // onInit(editor) {
   //   this.editor = editor;

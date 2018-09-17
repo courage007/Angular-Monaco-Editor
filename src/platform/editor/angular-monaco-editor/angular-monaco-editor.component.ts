@@ -33,8 +33,11 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
   providers: [CODE_EDITOR_INPUT_VALUE_ACCESSOR]
 })
 
+// 自定义输入控件 <-> Monaco Edtor
+
 // 自定义输入控件:3.1 implements ControlValueAccessor 
-export class AngularMonacoEditorComponent implements AfterViewInit, ControlValueAccessor /*, OnDestroy*/{
+export class AngularMonacoEditorComponent implements AfterViewInit, ControlValueAccessor, OnDestroy{
+
   protected _editor: any;
   private _options: any;
   // protected _windowResizeSubscription: Subscription;
@@ -45,7 +48,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   @Input('options')
   set options(options: any) {
-    // 默认options + 自定义options
+    // 默认options(this.config.defaultOptions) + 自定义options(options)
     this._options = Object.assign({}, this.config.defaultOptions, options);
     if (this._editor) {
       this._editor.dispose();
@@ -66,7 +69,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   // }
 
   // 注入AngularMonacoEditorConfig，在创建Editor实例时设置config
-  constructor(/*private zone: NgZone, */ @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig) {
+  constructor(private zone: NgZone, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig) {
 
   }
 
@@ -110,15 +113,15 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     }
   }
 
-  // ngOnDestroy() {
-  //   if (this._windowResizeSubscription) {
-  //     this._windowResizeSubscription.unsubscribe();
-  //   }
-  //   if (this._editor) {
-  //     this._editor.dispose();
-  //     this._editor = undefined;
-  //   }
-  // }
+  ngOnDestroy() {
+    // if (this._windowResizeSubscription) {
+    //   this._windowResizeSubscription.unsubscribe();
+    // }
+    if (this._editor) {
+      this._editor.dispose();
+      this._editor = undefined;
+    }
+  }
 
   protected initMonaco(options: any): void {
     console.log("Init the custom monaco code editor.");
@@ -136,13 +139,10 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
       this._editor.setValue(this._value);
     }
 
-    this._editor.onDidChangeModelContent((e: any) => {
-      this.value = this._editor.getValue();
-    });
+    // monaco editor -> outside component
+    this._editor.onDidChangeModelContent((e: any) => this.onChangeModelContentHandler(e));
 
-    this._editor.onDidBlurEditorText((e: any) => {
-      this.onTouchedCallback();
-    });
+    this._editor.onDidBlurEditorText((e: any) => this.onblurEditorTextHandler(e));
 
     // refresh layout on resize event.
     // if (this._windowResizeSubscription) {
@@ -152,15 +152,21 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // this.onInit.emit(this._editor);
   }
 
-  private _value: string = '';
-  
-  onChangeCallback = (_: any) => {
-    console.log("Value changed:" + _);
-  };
+  onChangeModelContentHandler(e){
+    const _value = this._editor.getValue();
+    
+    // monaco editor -> outside component
+    // https://github.com/JTangming/tm/issues/4 ngZone详解
+    this.zone.run(() => this.value = _value);// value is not propagated to parent when executing outside zone.
+    console.log("write from the monaco:" + this._value);
+  }
 
-  onTouchedCallback = () => {
-    console.log("Be touched");
-  };
+  onblurEditorTextHandler(e){
+
+    this.onTouchedHandler();
+  }
+
+  private _value: string = '';
 
   //get accessor
   get value(): any {
@@ -169,28 +175,45 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   //set accessor including call the onchange callback
   set value(v: any) {
-    if (v !== this._value) {// 注意这种写法，值得学习
+    if (v !== this.value) {// 注意这种写法，值得学习
       this._value = v;
-      this.onChangeCallback(v);
     }
+
+    this.onChangeHandler(this.value);//在属性修饰器里调用onchangeHandler方法
+  }
+
+  localEditor(){//Demo: outside component -> monaco editor
+    this.writeValue('test');
   }
 
   // 自定义输入控件:3.2 implements ControlValueAccesso
+
+  // outside component -> monaco editor
   
   //From ControlValueAccessor interface
   writeValue(value: any) {
-    if (value !== this._value) {
-        this.value = value;
-    }
+    this.value = value || '';
+
+    // Fix for value change while dispose in process.
+    setTimeout(() => {
+      if (this._editor /*&& !this.options.model*/) {
+        this._editor.setValue(this._value);
+        console.log("write to the editor:" + this._value);
+      }
+    });
   }
+
+  //定义ControlValueAccessor提供的事件回调
+  onChangeHandler = (_: any) => {};//Propagate Change to outside
+  onTouchedHandler = () => {};
 
   //From ControlValueAccessor interface
   registerOnChange(fn: any) {
-      this.onChangeCallback = fn;
+    this.onChangeHandler = fn;
   }
 
   //From ControlValueAccessor interface
   registerOnTouched(fn: any) {
-      this.onTouchedCallback = fn;
+    this.onTouchedHandler = fn;
   }
 }

@@ -6,6 +6,12 @@
     <angular-monaco-editor [options]="options" [(ngModel)]="code"></angular-monaco-editor>
 </div>
 
-<p>Data in the app: {{code}}</p>
-<button (click)="setCode()">Set code in the app component</button>
+<div class="dataShow">
+    <pre>Data in the app: {{code}}</pre>
+</div>
+
+<div class="setCode">
+    <button (click)="setCode()">Set code in the app component</button>
+</div>
+
 <!-- <angular-monaco-editor [options]="options" [model]="model"></angular-monaco-editor> -->
