@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AngularMonacoEditorConfig } from '../platform/editor/config';
-import { AngularMonacoEditorModule } from '../platform/editor/editor.module';
+import { AngularMonacoEditorConfig } from '../../platform/editor/config';
+import { AngularMonacoEditorModule } from '../../platform/editor/editor.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';  //import FormsModule to make ngModel attr work
 
@@ -13,7 +13,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
   defaultOptions: { scrollBeyondLastLine: false },
   onMonacoLoad: () => {
 
-    console.log("moncaco: " + (<any>window).monaco);
+    // console.log("moncaco: " + (<any>window).monaco);
 
     const id = "foo.json";
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({

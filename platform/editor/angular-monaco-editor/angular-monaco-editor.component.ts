@@ -1,3 +1,4 @@
+/// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 // import { fromEvent, Subscription } from 'rxjs';
@@ -6,7 +7,8 @@ import { Subscription } from 'rxjs';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-// import * as monaco from 'monaco-editor'; //npm install monaco-editor后，通过import方式引用它  
+// import * as monaco from 'monaco-editor'; //npm install monaco-editor后，通过import方式引用它
+
 
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 
@@ -132,7 +134,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // if (hasModel) {
     //   options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
     // }
-
+    
     this._editor = monaco.editor.create(this._editorComponent.nativeElement, options);
 
     if (!hasModel) {
