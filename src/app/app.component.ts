@@ -68,4 +68,18 @@ export class AppComponent {
   //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
   //   // editor.executeEdits("my-source", [op]);
   // }
+
+  // Add Event Handler
+  onInitHandler(event: any){
+    console.log(event);
+  }
+
+  onChangeHandler(event: any){
+    console.log(event);
+  }
+
+  onTouchedHandler(event: any){
+    console.log(event);
+  }
+
 }

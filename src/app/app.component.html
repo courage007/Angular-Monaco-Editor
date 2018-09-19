@@ -2,8 +2,9 @@
 <!-- <div class="editor">
     <angular-monaco-editor [(ngModel)] = "code"></angular-monaco-editor>
 </div> -->
-<div class="editor">
-    <angular-monaco-editor [options]="options" [(ngModel)]="code"></angular-monaco-editor>
+<div class="editorPanel">
+    <angular-monaco-editor [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
+        (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
 </div>
 
 <div class="dataShow">

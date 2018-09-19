@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from './config';
 import { AngularMonacoEditorComponent } from './angular-monaco-editor/angular-monaco-editor.component';
+import { CodeEditorEventService } from './services/code-editor.event.service';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { AngularMonacoEditorComponent } from './angular-monaco-editor/angular-mo
   ],
   exports: [
     AngularMonacoEditorComponent
-  ]
+  ],
+  providers: [CodeEditorEventService]
 })
 
 export class AngularMonacoEditorModule {

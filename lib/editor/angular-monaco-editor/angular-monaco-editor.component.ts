@@ -1,18 +1,13 @@
 /// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
-import { Component, OnInit } from '@angular/core';
-import { AfterViewInit, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-// import { fromEvent, Subscription } from 'rxjs';
-import { Subscription } from 'rxjs';
-
+import { Component, OnInit, AfterViewInit, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-// import * as monaco from 'monaco-editor'; //npm install monaco-editor后，通过import方式引用它
-
+import { pick } from 'lodash';
 
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
-
-// import { AngularEditorModel } from '../types';
+import { CodeEditorEventService } from '../services/code-editor.event.service';
+import { CODE_EDITOR_EVENTS } from '../constants/events';
 
 let loadedMonaco: boolean = false;
 let loadPromise: Promise<void>;
@@ -46,7 +41,9 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   @ViewChild('codeEditor') _editorComponent: ElementRef; //动态添加代码编辑器
 
-  // @Output() onInit = new EventEmitter<any>();
+  @Output() onInit = new EventEmitter<any>();
+  @Output() onChange = new EventEmitter<any>();
+  @Output() onTouched = new EventEmitter<any>();
 
   @Input('options')
   set options(options: any) {
@@ -71,7 +68,14 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   // }
 
   // 注入AngularMonacoEditorConfig，在创建Editor实例时设置config
-  constructor(private zone: NgZone, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig) {
+  constructor(private zone: NgZone, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig, private codeEditorEventService: CodeEditorEventService) {
+    
+    // 初始化自定义事件
+    // codeEditorEventService.eventNames.forEach((name) => { 
+    //   self[name] = new EventEmitter<any>(); // 创建自定义事件
+    //   const eventPair = pick(self, name);
+    //   codeEditorEventService.addEvent(eventPair);
+    // });
 
   }
 
@@ -144,14 +148,25 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // monaco editor -> outside component
     this._editor.onDidChangeModelContent((e: any) => this.onChangeModelContentHandler(e));
 
-    this._editor.onDidBlurEditorText((e: any) => this.onblurEditorTextHandler(e));
+    this._editor.onDidBlurEditorText((e: any) => this.onBlurEditorTextHandler(e));
 
     // refresh layout on resize event.
     // if (this._windowResizeSubscription) {
     //   this._windowResizeSubscription.unsubscribe();
     // }
     // this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
-    // this.onInit.emit(this._editor);
+
+    // this.codeEditorEventService.fireEvent({ 
+    //   eventName: CODE_EDITOR_EVENTS.onInit,
+    //   target: this,
+    //   editor: this._editor
+    // });
+    this.onInit.emit({ 
+        eventName: CODE_EDITOR_EVENTS.onInit,
+        target: this,
+        editor: this._editor
+      }
+    );
   }
 
   onChangeModelContentHandler(e){
@@ -160,10 +175,10 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // monaco editor -> outside component
     // https://github.com/JTangming/tm/issues/4 ngZone详解
     this.zone.run(() => this.value = _value);// value is not propagated to parent when executing outside zone.
-    console.log("write from the monaco:" + this._value);
+    // console.log("write from the monaco:" + this._value);
   }
 
-  onblurEditorTextHandler(e){
+  onBlurEditorTextHandler(e){
 
     this.onTouchedHandler();
   }
@@ -200,22 +215,46 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     setTimeout(() => {
       if (this._editor /*&& !this.options.model*/) {
         this._editor.setValue(this._value);
-        console.log("write to the editor:" + this._value);
+        // console.log("write to the editor:" + this._value);
       }
     });
   }
 
   //定义ControlValueAccessor提供的事件回调
-  onChangeHandler = (_: any) => {};//Propagate Change to outside
-  onTouchedHandler = () => {};
+  onChangeHandler = (_: any) => { //Propagate Change to outside
+    // this.codeEditorEventService.fireEvent({ 
+    //   eventName: CODE_EDITOR_EVENTS.onChange,
+    //   target: this,
+    //   data: _
+    // });
+    this.onChange.emit({ 
+      eventName: CODE_EDITOR_EVENTS.onChange,
+      target: this,
+      data: _
+    });
+  };
+
+  //定义ControlValueAccessor提供的事件回调
+  onTouchedHandler = () => {
+    // this.codeEditorEventService.fireEvent({ 
+    //   eventName: CODE_EDITOR_EVENTS.onTouched,
+    //   target: this
+    // });
+    this.onTouched.emit({ 
+      eventName: CODE_EDITOR_EVENTS.onChange,
+      target: this
+    });
+
+  };
 
   //From ControlValueAccessor interface
   registerOnChange(fn: any) {
-    this.onChangeHandler = fn;
+    this.onChangeHandler(this);
   }
 
   //From ControlValueAccessor interface
   registerOnTouched(fn: any) {
-    this.onTouchedHandler = fn;
+    this.onTouchedHandler();
   }
+  
 }
