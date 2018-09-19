@@ -11,7 +11,6 @@ import { CODE_EDITOR_EVENTS } from '../constants/events';
 
 let loadedMonaco: boolean = false;
 let loadPromise: Promise<void>;
-// declare const require: any;
 
 // 自定义输入控件:1.封装ControlValueAccessor
 // https://code-examples.net/zh-CN/q/2154761
@@ -40,10 +39,10 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   // protected _windowResizeSubscription: Subscription;
 
   @ViewChild('codeEditor') _editorComponent: ElementRef; //动态添加代码编辑器
-
-  @Output() onInit = new EventEmitter<any>();
-  @Output() onChange = new EventEmitter<any>();
-  @Output() onTouched = new EventEmitter<any>();
+  
+  @Output() onInit;
+  @Output() onChange;
+  @Output() onTouched;
 
   @Input('options')
   set options(options: any) {
@@ -69,13 +68,15 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   // 注入AngularMonacoEditorConfig，在创建Editor实例时设置config
   constructor(private zone: NgZone, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig, private codeEditorEventService: CodeEditorEventService) {
-    
+
     // 初始化自定义事件
-    // codeEditorEventService.eventNames.forEach((name) => { 
-    //   self[name] = new EventEmitter<any>(); // 创建自定义事件
-    //   const eventPair = pick(self, name);
-    //   codeEditorEventService.addEvent(eventPair);
-    // });
+    const self = this;
+    codeEditorEventService.eventNames.forEach((name) => {
+      // 创建自定义事件，此处作用等效于: @Output() onInit = new EventEmitter<any>() 
+      self[name] = new EventEmitter<any>();
+      const eventPair = pick(self, name);
+      codeEditorEventService.addEvent(eventPair);
+    });
 
   }
 
@@ -156,17 +157,11 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // }
     // this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
 
-    // this.codeEditorEventService.fireEvent({ 
-    //   eventName: CODE_EDITOR_EVENTS.onInit,
-    //   target: this,
-    //   editor: this._editor
-    // });
-    this.onInit.emit({ 
-        eventName: CODE_EDITOR_EVENTS.onInit,
-        target: this,
-        editor: this._editor
-      }
-    );
+    this.codeEditorEventService.fireEvent({ 
+      eventName: CODE_EDITOR_EVENTS.onInit,
+      target: this,
+      editor: this._editor
+    });
   }
 
   onChangeModelContentHandler(e){
@@ -220,33 +215,6 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     });
   }
 
-  //定义ControlValueAccessor提供的事件回调
-  onChangeHandler = (_: any) => { //Propagate Change to outside
-    // this.codeEditorEventService.fireEvent({ 
-    //   eventName: CODE_EDITOR_EVENTS.onChange,
-    //   target: this,
-    //   data: _
-    // });
-    this.onChange.emit({ 
-      eventName: CODE_EDITOR_EVENTS.onChange,
-      target: this,
-      data: _
-    });
-  };
-
-  //定义ControlValueAccessor提供的事件回调
-  onTouchedHandler = () => {
-    // this.codeEditorEventService.fireEvent({ 
-    //   eventName: CODE_EDITOR_EVENTS.onTouched,
-    //   target: this
-    // });
-    this.onTouched.emit({ 
-      eventName: CODE_EDITOR_EVENTS.onChange,
-      target: this
-    });
-
-  };
-
   //From ControlValueAccessor interface
   registerOnChange(fn: any) {
     this.onChangeHandler(this);
@@ -257,4 +225,20 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     this.onTouchedHandler();
   }
   
+  //ControlValueAccessor提供的事件回调
+  onChangeHandler = (_: any) => { //Propagate Change to outside
+    this.codeEditorEventService.fireEvent({ 
+      eventName: CODE_EDITOR_EVENTS.onChange,
+      target: this,
+      data: _
+    });
+  };
+
+  //ControlValueAccessor提供的事件回调
+  onTouchedHandler = () => {
+    this.codeEditorEventService.fireEvent({ 
+      eventName: CODE_EDITOR_EVENTS.onTouched,
+      target: this
+    });
+  };
 }

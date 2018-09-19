@@ -58,20 +58,18 @@ export class AppComponent {
     this.code = this.jsCode;
   }
 
-  // onInit(editor) {
-  //   this.editor = editor;
-  //   console.log(editor);
-  //   // let line = editor.getPosition();
-  //   // let range = new monaco.Range(line.lineNumber, 1, line.lineNumber, 1);
-  //   // let id = { major: 1, minor: 1 };
-  //   // let text = 'FOO';
-  //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
-  //   // editor.executeEdits("my-source", [op]);
-  // }
-
   // Add Event Handler
   onInitHandler(event: any){
     console.log(event);
+    
+    //   this.editor = editor;
+    //   console.log(editor);
+    //   // let line = editor.getPosition();
+    //   // let range = new monaco.Range(line.lineNumber, 1, line.lineNumber, 1);
+    //   // let id = { major: 1, minor: 1 };
+    //   // let text = 'FOO';
+    //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
+    //   // editor.executeEdits("my-source", [op]);
   }
 
   onChangeHandler(event: any){
