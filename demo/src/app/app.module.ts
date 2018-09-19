@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';  //import FormsModule to make ngMo
 
 import * as monaco from 'monaco-editor';
 import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { AppComponent } from './app.component';
 
