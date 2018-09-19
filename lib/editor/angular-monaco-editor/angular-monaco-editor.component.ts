@@ -1,4 +1,3 @@
-/// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
 import { Component, OnInit, AfterViewInit, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -8,6 +7,8 @@ import { pick } from 'lodash';
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 import { CodeEditorEventService } from '../services/code-editor.event.service';
 import { CODE_EDITOR_EVENTS } from '../constants/events';
+
+declare const monaco: any;
 
 let loadedMonaco: boolean = false;
 let loadPromise: Promise<void>;
