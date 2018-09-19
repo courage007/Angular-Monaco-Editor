@@ -15,7 +15,7 @@ npm install monaco-editor --save
 npm install angular-monaco-editor --save
  ```
  
-- (2) Add the glob to assets in .angular-cli.json (to make monaco-editor lib available to the app):
+- (2) Add the glob to assets in **.angular-cli.json** (to make monaco-editor lib available to the app):
 ```typescript
 {
   "apps": [
@@ -40,25 +40,26 @@ npm install angular-monaco-editor --save
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';  //import FormsModule to make ngModel attr work
+
+import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { AppComponent } from './app.component';
-import { AngularMonacoEditorModule } from 'angular-monaco-editor';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
     FormsModule,
-    AngularMonacoEditorModule.forRoot() // use forRoot() in main app module only.
+    BrowserModule,
+    AngularMonacoEditorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
 ```
 
 - (2) Create Editor options in component.(eg: app.component.ts)
@@ -67,29 +68,48 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
-  editorOptions = {theme: 'vs-dark', language: 'javascript'};
-  code: string= 'function x() {\nconsole.log("Hello world!");\n}';
+  options = {
+    theme: 'vs-dark',
+    language: 'javascript',
+  };
+ 
+  code: string = `
+    function foo() {
+      alert('Hello');
+      alert('World');
+      alert('Hello World.');
+    }`;
 }
 ```
 - (3) Include editor in html with options and ngModel bindings.(eg: app.component.html)
 ```html
-<angular-monaco-editor [options]="editorOptions" [(ngModel)]="code"></angular-monaco-editor>
+<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" </angular-monaco-editor>
 ```
 
 ### Styling
-- (1) Add class to editor tag. (eg. class="my-code-editor")
+- (1) Add class to editor tag. (eg. class="editorPanel")
 ```html
-<angular-monaco-editorr class="my-code-editor" [options]="editorOptions" [(ngModel)]="code"></angular-monaco-editor>
+<div class="editorPanel">
+    <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code"></angular-monaco-editor>
+</div>
 ```
 - (2) Add styling in css/scss file:
-```scss
-.my-code-editor {
-  .editorContainer {
-    height: calc(100vh - 100px);
-  }
+```css
+.editorPanel{
+    display: block;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.editorPanel .customMonacoEditor { /*set automaticLayout*/
+    height: calc(100vh - 0px);
 }
 ```
 Set automaticLayout option to adjust editor size dynamically. Recommended when using in modal dialog or tabs where editor is not visible initially.
@@ -97,7 +117,8 @@ Set automaticLayout option to adjust editor size dynamically. Recommended when u
 ### Events
 Output event (onInit) expose editor instance that can be used for performing custom operations on the editor. 
 ```html
-<angular-monaco-editor [options]="editorOptions" [(ngModel)]="code" (onInit)="onInit($event)"></angular-monaco-editor>
+<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
+        (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
 ```
 
 ```typescript
@@ -108,17 +129,40 @@ export class AppComponent {
       let line = editor.getPosition();
       console.log(line);
     }
+   
+}
+export class AppComponent {
+  options = {theme: 'vs-dark',language: 'javascript'};
+  code: string = `
+    function foo() {
+      alert('Hello');
+      alert('World');
+      alert('Hello World.');
+  `;
+  
+  // Add Event Handler
+  onInitHandler(event: any){
+    console.log(event);
+  }
+
+  onChangeHandler(event: any){
+    console.log(event);
+  }
+
+  onTouchedHandler(event: any){
+    console.log(event);
+  }
 }
 ```
 
 ## Configurations
-`forRoot()` method of MonacoEditorModule accepts config of type `AngularMonacoEditorConfig`.
+`forRoot()` method of AngularMonacoEditorModule accepts config of type `AngularMonacoEditorConfig`.
 ```typescript
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { MonacoEditorModule, AngularMonacoEditorConfig } from 'angular-monaco-editor';
+import { AngularMonacoEditorModule, AngularMonacoEditorConfig } from 'angular-monaco-editor';
 import { AppComponent } from './app.component';
 
 const monacoConfig: AngularMonacoEditorConfig = {
@@ -146,15 +190,21 @@ export class AppModule {
 ### Configure JSON Defaults
 `onMonacoLoad` property of `AngularMonacoEditorConfig` can be used to configure JSON default.
 ```typescript
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';  //import FormsModule to make ngModel attr work
 
-import { MonacoEditorModule, AngularMonacoEditorConfig } from 'angular-monaco-editor';
+import * as monaco from 'monaco-editor';
+import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
+
 import { AppComponent } from './app.component';
 
 const monacoConfig: AngularMonacoEditorConfig = {
-  onMonacoLoad: () => { 
+  baseUrl: 'assets',
+  defaultOptions: { scrollBeyondLastLine: false },
+  onMonacoLoad: () => {
+    // console.log("moncaco: " + (<any>window).monaco);
+
     const id = "foo.json";
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
@@ -172,20 +222,10 @@ const monacoConfig: AngularMonacoEditorConfig = {
             }
           }
         }
-      },{
-        uri: "http://myserver/bar-schema.json",
-        fileMatch: [id],
-        schema: {
-          type: "object",
-          properties: {
-            q1: {
-              enum: [ "x1", "x2"]
-            }
-          }
-        }
       }]
     });
-  } 
+
+  }
 };
 
 @NgModule({
@@ -193,15 +233,14 @@ const monacoConfig: AngularMonacoEditorConfig = {
     AppComponent
   ],
   imports: [
-    BrowserModule,
     FormsModule,
+    BrowserModule,
     AngularMonacoEditorModule.forRoot(monacoConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
 ```
 
 ## Links
