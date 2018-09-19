@@ -11,6 +11,9 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "paths": {
+      "angularMonacoEditor":["lib/editor"]
+    },
     "lib": [
       "es2017",
       "dom"

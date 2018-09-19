@@ -15,7 +15,9 @@ import { CodeEditorEventService } from './services/code-editor.event.service';
   exports: [
     AngularMonacoEditorComponent
   ],
-  providers: [CodeEditorEventService]
+  providers: [
+    CodeEditorEventService
+  ]
 })
 
 export class AngularMonacoEditorModule {
