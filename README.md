@@ -88,7 +88,7 @@ export class AppComponent {
 ```
 - (3) Include editor in html with options and ngModel bindings.(eg: app.component.html)
 ```html
-<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" </angular-monaco-editor>
+<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code"> </angular-monaco-editor>
 ```
 
 ### Styling
