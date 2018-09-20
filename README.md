@@ -43,7 +43,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';  //import FormsModule to make ngModel attr work
 
 import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { AppComponent } from './app.component';
 
