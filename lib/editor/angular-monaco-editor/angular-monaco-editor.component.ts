@@ -27,7 +27,7 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
   templateUrl: './angular-monaco-editor.component.html',
   styleUrls: ['./angular-monaco-editor.component.css'],
   // 自定义输入控件:2.引入依赖服务ControlValueAccessor
-  providers: [CODE_EDITOR_INPUT_VALUE_ACCESSOR]
+  providers: [CODE_EDITOR_INPUT_VALUE_ACCESSOR, CodeEditorEventService]
 })
 
 // 自定义输入控件 <-> Monaco Edtor

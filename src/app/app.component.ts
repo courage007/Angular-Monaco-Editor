@@ -27,9 +27,6 @@ export class AppComponent {
       alert('World');
       alert('Hello World.');
   `;
-  // cssCode = `.my-class {
-  //   color: red;
-  // }`;
   
   jsCode = `function hello() {
     alert('Hello world!');
