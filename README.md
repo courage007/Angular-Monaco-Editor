@@ -43,7 +43,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';  //import FormsModule to make ngModel attr work
 
 import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 import { AppComponent } from './app.component';
 
@@ -88,7 +87,7 @@ export class AppComponent {
 ```
 - (3) Include editor in html with options and ngModel bindings.(eg: app.component.html)
 ```html
-<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" </angular-monaco-editor>
+<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code"> </angular-monaco-editor>
 ```
 
 ### Styling
