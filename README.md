@@ -34,6 +34,8 @@ npm install angular-monaco-editor --save
   ...
 }
  ```
+ PS: In Angular 6 CLI, please copy node_modules/monaco-editor/min to src/assets and rename folder as 'monaco' by hand.
+ PPS: Angular 6 CLI does not allow to dymanicly load resource using input/output.
 
 ### Sample
 - (1) Include AngularMonacoEditorModule in Main Module and Feature Modules where you want to use the editor component.(eg: app.module.ts): 
