@@ -123,15 +123,7 @@ Output event (onInit) expose editor instance that can be used for performing cus
 ```
 
 ```typescript
-export class AppComponent {
-  editorOptions = {theme: 'vs-dark', language: 'javascript'};
-  code: string= 'function x() {\nconsole.log("Hello world!");\n}';
-  onInit(editor) {
-      let line = editor.getPosition();
-      console.log(line);
-    }
-   
-}
+
 export class AppComponent {
   options = {theme: 'vs-dark',language: 'javascript'};
   code: string = `
