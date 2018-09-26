@@ -192,7 +192,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
       this._value = v;
     }
 
-    this.onChangeHandler(this.value);//在属性修饰器里调用onchangeHandler方法
+    this.onChangeHandler(this._value);//在属性修饰器里调用onchangeHandler方法
   }
 
   localEditor(){//Demo: outside component -> monaco editor

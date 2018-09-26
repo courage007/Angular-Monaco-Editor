@@ -2,20 +2,22 @@
 <!-- <div class="editor">
     <angular-monaco-editor [(ngModel)] = "code"></angular-monaco-editor>
 </div> -->
+<div class="dataShow">
+    <pre>Data in the app: {{code}}</pre>
+</div>
+    
+<div class="setCode">
+    <button (click)="setCode()">Set code in the app component</button>
+</div>
+
 <div class="editorPanel">
     <angular-monaco-editor [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
         (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
 </div>
 
-<div class="dataShow">
-    <pre>Data in the app: {{code}}</pre>
-</div>
 
-<div class="setCode">
-    <button (click)="setCode()">Set code in the app component</button>
-</div>
 
-<div class="editorPanel2">
+<!-- <div class="editorPanel2">
     <angular-monaco-editor [(ngModel)]="jsonCode" ></angular-monaco-editor>
-</div>
+</div> -->
 
