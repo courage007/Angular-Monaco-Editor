@@ -172,7 +172,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // monaco editor -> outside component
     // https://github.com/JTangming/tm/issues/4 ngZone详解
     this.zone.run(() => this.value = _value);// value is not propagated to parent when executing outside zone.
-    console.log("write from the monaco:" + this._value);
+    // console.log("write from the monaco:" + this._value);
   }
 
   onBlurEditorTextHandler(e){
@@ -217,7 +217,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     setTimeout(() => {
       if (this._editor /*&& !this.options.model*/) {
         this._editor.setValue(this._value);
-        console.log("write to the editor:" + this._value);
+        // console.log("write to the editor:" + this._value);
       }
     });
   }
