@@ -70,7 +70,7 @@ export class AppComponent {
   }
 
   onChangeHandler(event: any){
-    console.log(event);
+    console.log("Changing:" + event);
   }
 
   onTouchedHandler(event: any){

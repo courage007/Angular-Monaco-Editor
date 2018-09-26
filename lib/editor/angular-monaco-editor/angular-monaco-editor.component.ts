@@ -42,8 +42,6 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   @ViewChild('codeEditor') _editorComponent: ElementRef; //动态添加代码编辑器
 
   @Output() onInit;
-  @Output() onChange;
-  @Output() onTouched;
 
   @Input('options')
   set options(options: any) {
@@ -179,7 +177,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   onBlurEditorTextHandler(e){
 
-    this.onTouchedHandler();
+    this.onControlTouched();
   }
 
   onLayoutChangeHandler(e){
@@ -200,7 +198,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
       this._value = v;
     }
 
-    this.onChangeHandler(this.value);//在属性修饰器里调用onchangeHandler方法
+    this.onControlValueChange(this.value);//在属性修饰器里调用onControlValueChange方法
   }
 
   localEditor(){//Demo: outside component -> monaco editor
@@ -226,28 +224,20 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
 
   //From ControlValueAccessor interface
   registerOnChange(fn: any) {
-    this.onChangeHandler(this);
+    this.onControlValueChange = fn;
   }
 
   //From ControlValueAccessor interface
   registerOnTouched(fn: any) {
-    this.onTouchedHandler();
+    this.onControlTouched = fn;
   }
   
   //ControlValueAccessor提供的事件回调
-  onChangeHandler = (_: any) => { //Propagate Change to outside
-    this.codeEditorEventService.fireEvent({ 
-      eventName: CODE_EDITOR_EVENTS.onChange,
-      target: this,
-      data: _
-    });
+  onControlValueChange = (_: any) => {
+  };
+  
+  //ControlValueAccessor提供的事件回调
+  onControlTouched = () => {
   };
 
-  //ControlValueAccessor提供的事件回调
-  onTouchedHandler = () => {
-    this.codeEditorEventService.fireEvent({ 
-      eventName: CODE_EDITOR_EVENTS.onTouched,
-      target: this
-    });
-  };
 }
