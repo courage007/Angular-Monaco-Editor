@@ -1,5 +1,5 @@
-export { AngularMonacoEditorModule } from './editor.module';
-export { AngularMonacoEditorComponent }  from './angular-monaco-editor/angular-monaco-editor.component';
-export { AngularMonacoEditorConfig } from './config';
-export { CODE_EDITOR_EVENTS } from './constants/events';
-export { CodeEditorEventService } from './services/code-editor.event.service';
+export * from './editor.module';
+export *  from './angular-monaco-editor/angular-monaco-editor.component';
+export * from './config';
+export * from './constants/events';
+export * from './services/code-editor.event.service';
