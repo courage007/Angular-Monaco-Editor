@@ -40,7 +40,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   // protected _windowResizeSubscription: Subscription;
 
   @ViewChild('codeEditor') _editorComponent: ElementRef; //动态添加代码编辑器
-  
+
   @Output() onInit;
   @Output() onChange;
   @Output() onTouched;
@@ -151,18 +151,21 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     this._editor.onDidChangeModelContent((e: any) => this.onChangeModelContentHandler(e));
 
     this._editor.onDidBlurEditorText((e: any) => this.onBlurEditorTextHandler(e));
+    
+    this._editor.onDidLayoutChange((e: any) => this.onLayoutChangeHandler(e));
 
     // refresh layout on resize event.
     // if (this._windowResizeSubscription) {
     //   this._windowResizeSubscription.unsubscribe();
     // }
     // this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
-
+    // this.onInit.emit(this._editor);
     this.codeEditorEventService.fireEvent({ 
       eventName: CODE_EDITOR_EVENTS.onInit,
       target: this,
       editor: this._editor
     });
+
   }
 
   onChangeModelContentHandler(e){
@@ -171,13 +174,18 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // monaco editor -> outside component
     // https://github.com/JTangming/tm/issues/4 ngZone详解
     this.zone.run(() => this.value = _value);// value is not propagated to parent when executing outside zone.
-    // console.log("write from the monaco:" + this._value);
+    console.log("write from the monaco:" + this._value);
   }
 
   onBlurEditorTextHandler(e){
 
     this.onTouchedHandler();
   }
+
+  onLayoutChangeHandler(e){
+    console.log('Layout changed:\n' + e);
+  }
+
 
   private _value: string = '';
 
@@ -192,7 +200,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
       this._value = v;
     }
 
-    this.onChangeHandler(this._value);//在属性修饰器里调用onchangeHandler方法
+    this.onChangeHandler(this.value);//在属性修饰器里调用onchangeHandler方法
   }
 
   localEditor(){//Demo: outside component -> monaco editor
@@ -211,7 +219,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     setTimeout(() => {
       if (this._editor /*&& !this.options.model*/) {
         this._editor.setValue(this._value);
-        // console.log("write to the editor:" + this._value);
+        console.log("write to the editor:" + this._value);
       }
     });
   }

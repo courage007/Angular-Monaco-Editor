@@ -12,7 +12,7 @@ import { AngularMonacoEditorComponent } from './angular-monaco-editor/angular-mo
     AngularMonacoEditorComponent
   ],
   exports: [
-    AngularMonacoEditorComponent
+    AngularMonacoEditorComponent  
   ],
   providers: [
   ]
