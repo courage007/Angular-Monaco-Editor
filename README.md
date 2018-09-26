@@ -118,8 +118,7 @@ Set automaticLayout option to adjust editor size dynamically. Recommended when u
 ### Events
 Output event (onInit) expose editor instance that can be used for performing custom operations on the editor. 
 ```html
-<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
-        (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
+<angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"></angular-monaco-editor>
 ```
 
 ```typescript
@@ -146,13 +145,6 @@ export class AppComponent {
     console.log(event);
   }
 
-  onChangeHandler(event: any){
-    console.log(event);
-  }
-
-  onTouchedHandler(event: any){
-    console.log(event);
-  }
 }
 ```
 
