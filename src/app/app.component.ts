@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularEditorModel } from '../../lib/editor/types';
+import { AngularEditorModel } from 'angular-monaco-editor';
 
 @Component({
   selector: 'app-root',
@@ -7,52 +7,17 @@ import { AngularEditorModel } from '../../lib/editor/types';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  // editor: any;
-  // toggleLanguage = true;
 
-  showMultiple = true;
   options = {
     theme: 'vs-dark',
-    language: 'javascript',
-  };
-  
-  setCode(){
-    this.code = 'Code changed from the app component.';
-  }
-
-  //todo: 替换成动态数据（通过服务获取的外部数据）
-  code: string = `
-    function foo() {
-      alert('Hello');
-      alert('World');
-      alert('Hello World.');
-  `;
-  
-  jsCode = `function hello() {
-    alert('Hello world!');
-    alert('foo1');
-    alert('foo2');
-  }`;
-
-  jsonCode = [
-    '{',
-    '    "p1": "v3",',
-    '    "p2": false',
-    '}'
-  ].join('\n');
-
-  model: AngularEditorModel = {
-    value: this.jsonCode,
     language: 'json',
-    uri: 'foo.json'
+    formatOnType: true// did not work here
   };
+  
+  jsonCode = '{"p1":"foo1","p2":false}';
 
   ngOnInit() {
-    this.updateOptions();
-  }
 
-  updateOptions() {
-    this.code = this.jsCode;
   }
 
   // Add Event Handler
@@ -67,14 +32,6 @@ export class AppComponent {
     //   // let text = 'FOO';
     //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
     //   // editor.executeEdits("my-source", [op]);
-  }
-
-  onChangeHandler(event: any){
-    console.log("Changing:" + event);
-  }
-
-  onTouchedHandler(event: any){
-    console.log(event);
   }
 
 }

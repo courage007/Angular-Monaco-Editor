@@ -1,18 +1,10 @@
 {
-  "name": "angular-monaco-editor",
-  "version": "1.4.0",
-  "description": "To utilize the Monaco Code Editor as an Angular Component.",
+  "name": "angular-monaco-editor-demo",
+  "version": "1.0.0",
+  "description": "Demo of the  Angular Monaco Editor Component.",
   "author": "courage007 <wang_xufa@163.com>",
   "homepage": "https://github.com/courage007/Angular-Monaco-Editor",
   "license": "MIT",
-  "keywords": [
-    "angular-monaco-editor",
-    "angular-code-editor",
-    "code-editor",
-    "monaco-editor",
-    "editor",
-    "angular2+"
-  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -31,7 +23,10 @@
     "@angular/common": "^5.1.0",
     "@angular/core": "^5.1.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "angular-monaco-editor": "^1.4.0",
+    "ngx-monaco-editor": "^6.0.0"
+  },
   "devDependencies": {
     "@angular/animations": "^5.2.0",
     "@angular/cli": "~1.7.4",

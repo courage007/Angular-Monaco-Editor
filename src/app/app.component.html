@@ -1,23 +1,4 @@
-<h2>自定义代码编辑器</h2>
-<!-- <div class="editor">
-    <angular-monaco-editor [(ngModel)] = "code"></angular-monaco-editor>
-</div> -->
-<div class="dataShow">
-    <pre>Data in the app: {{code}}</pre>
-</div>
-    
-<div class="setCode">
-    <button (click)="setCode()">Set code in the app component</button>
-</div>
-
 <div class="editorPanel">
-    <angular-monaco-editor [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
-        (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
+    <pre>code:{{jsonCode}}</pre>
+    <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="jsonCode" (onInit)="onInitHandler($event)"></angular-monaco-editor>
 </div>
-
-
-
-<!-- <div class="editorPanel2">
-    <angular-monaco-editor [(ngModel)]="jsonCode" ></angular-monaco-editor>
-</div> -->
-
