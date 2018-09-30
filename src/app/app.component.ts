@@ -15,8 +15,8 @@ export class AppComponent {
     theme: 'vs-dark',
     language: 'javascript',
   };
-  
-  setCode(){
+
+  setCode() {
     this.code = 'Code changed from the app component.';
   }
 
@@ -27,7 +27,7 @@ export class AppComponent {
       alert('World');
       alert('Hello World.');
   `;
-  
+
   jsCode = `function hello() {
     alert('Hello world!');
     alert('foo1');
@@ -56,9 +56,9 @@ export class AppComponent {
   }
 
   // Add Event Handler
-  onInitHandler(event: any){
+  onInitHandler(event: any) {
     console.log(event);
-    
+
     //   this.editor = editor;
     //   console.log(editor);
     //   // let line = editor.getPosition();
@@ -69,11 +69,11 @@ export class AppComponent {
     //   // editor.executeEdits("my-source", [op]);
   }
 
-  onChangeHandler(event: any){
-    console.log("Changing:" + event);
+  onChangeHandler(event: any) {
+    console.log('Changing:' + event);
   }
 
-  onTouchedHandler(event: any){
+  onTouchedHandler(event: any) {
     console.log(event);
   }
 
