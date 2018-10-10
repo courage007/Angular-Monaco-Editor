@@ -24,7 +24,7 @@
     "@angular/core": "^5.1.0"
   },
   "dependencies": {
-    "angular-monaco-editor": "^1.4.0",
+    "angular-monaco-editor": "^1.4.1",
     "ngx-monaco-editor": "^6.0.0"
   },
   "devDependencies": {
