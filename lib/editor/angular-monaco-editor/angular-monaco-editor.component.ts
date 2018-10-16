@@ -2,16 +2,15 @@ import { Component, OnInit, AfterViewInit, ElementRef, EventEmitter, Input, OnDe
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { pick } from 'lodash';
+
 
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 import { CodeEditorEventService } from '../services/code-editor.event.service';
 import { CODE_EDITOR_EVENTS } from '../constants/events';
+import { AngularEditorModel } from '../types';
+import { BaseMonacoEditor } from '../base-monaco-editor';
 
 declare const monaco: any;
-
-let loadedMonaco = false;
-let loadPromise: Promise<void>;
 
 // 自定义输入控件:1.封装ControlValueAccessor
 // https://code-examples.net/zh-CN/q/2154761
@@ -23,6 +22,7 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
 };
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'angular-monaco-editor',
   templateUrl: './angular-monaco-editor.component.html',
   styleUrls: ['./angular-monaco-editor.component.css'],
@@ -33,112 +33,22 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
 // 自定义输入控件 <-> Monaco Edtor
 
 // 自定义输入控件:3.1 implements ControlValueAccessor
-export class AngularMonacoEditorComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
+export class AngularMonacoEditorComponent extends BaseMonacoEditor implements ControlValueAccessor {
 
-  protected _editor: any;
-  private _options: any;
   // protected _windowResizeSubscription: Subscription;
   private _value = '';
 
-  @ViewChild('codeEditor') _editorComponent: ElementRef; // 动态添加代码编辑器
-
-  @Output() onInit;
-
-  @Input('options')
-  set options(options: any) {
-    // 默认options(this.config.defaultOptions) + 自定义options(options)
-    this._options = Object.assign({}, this.config.defaultOptions, options);
-    if (this._editor) {
-      this._editor.dispose();
-      this.initMonaco(options);
-    }
-  }
-  get options(): any {
-    return this._options;
-  }
-
-  // @Input('model')
-  // set model(model: AngularEditorModel) {
-  //   this.options.model = model;
-  //   if (this._editor) {
-  //     this._editor.dispose();
-  //     this.initMonaco(this.options);
-  //   }
-  // }
-
-  // 注入AngularMonacoEditorConfig，在创建Editor实例时设置config
-  constructor(private zone: NgZone, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private config: AngularMonacoEditorConfig, private codeEditorEventService: CodeEditorEventService) {
-
-    // 初始化自定义事件
-    const self = this;
-    codeEditorEventService.eventNames.forEach((name) => {
-      // 创建自定义事件，此处作用等效于: @Output() onInit = new EventEmitter<any>() 
-      self[name] = new EventEmitter<any>();
-      const eventPair = pick(self, name);
-      codeEditorEventService.addEvent(eventPair);
-    });
-
-  }
-
-  ngAfterViewInit(): void {
-    if (loadedMonaco) {
-      // Wait until monaco editor is available
-      loadPromise.then(() => {
-        this.initMonaco(this.options);
-      });
-    } else {
-      loadedMonaco = true;
-      loadPromise = new Promise<void>((resolve: any) => {
-        const baseUrl = this.config.baseUrl || '/assets';
-        // if (typeof((<any>window).monaco) === 'object') {
-        //   resolve();
-        //   return;
-        // }
-        const onGotAmdLoader: any = () => {
-          // Load monaco
-          (<any>window).require.config({ paths: { 'vs': `${baseUrl}/monaco/vs` } });
-          (<any>window).require(['vs/editor/editor.main'], () => {
-            if (typeof this.config.onMonacoLoad === 'function') {
-              this.config.onMonacoLoad();
-            }
-            this.initMonaco(this.options);
-            resolve();
-          });
-        };
-
-        // Load AMD loader if necessary
-        if (!(<any>window).require) {
-          const loaderScript: HTMLScriptElement = document.createElement('script');
-          loaderScript.type = 'text/javascript';
-          loaderScript.src = `${baseUrl}/monaco/vs/loader.js`;
-          loaderScript.addEventListener('load', onGotAmdLoader);
-          document.body.appendChild(loaderScript);
-        } else {
-          onGotAmdLoader();
-        }
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    // if (this._windowResizeSubscription) {
-    //   this._windowResizeSubscription.unsubscribe();
-    // }
-    if (this._editor) {
-      this._editor.dispose();
-      this._editor = undefined;
-    }
+  // tslint:disable-next-line:max-line-length
+  constructor(private zone: NgZone, private editorEventService: CodeEditorEventService, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private angularEditorconfig: AngularMonacoEditorConfig) {
+    super(editorEventService, angularEditorconfig);
   }
 
   protected initMonaco(options: any): void {
-    console.log('Init the custom monaco code editor');
+    const hasModel = options.model;
 
-    // const hasModel = !!options.model;
-    const hasModel = false;
-
-    // if (hasModel) {
-    //   options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
-    // }
+    if (hasModel) {
+      options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
+    }
 
     this._editor = monaco.editor.create(this._editorComponent.nativeElement, options);
 
@@ -158,8 +68,7 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     //   this._windowResizeSubscription.unsubscribe();
     // }
     // this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
-    // this.onInit.emit(this._editor);
-    this.codeEditorEventService.fireEvent({
+    this.editorEventService.fireEvent({
       eventName: CODE_EDITOR_EVENTS.onInit,
       target: this,
       editor: this._editor
@@ -173,7 +82,6 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
     // monaco editor -> outside component
     // https://github.com/JTangming/tm/issues/4 ngZone详解
     this.zone.run(() => this.value = _value); // value is not propagated to parent when executing outside zone.
-    // console.log("write from the monaco:" + this._value);
   }
 
   onBlurEditorTextHandler(e) {
@@ -184,9 +92,6 @@ export class AngularMonacoEditorComponent implements AfterViewInit, ControlValue
   onLayoutChangeHandler(e) {
     console.log('Layout changed:\n' + e);
   }
-
-
-
 
   // get accessor
   get value(): any {

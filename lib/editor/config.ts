@@ -6,6 +6,6 @@ export const ANGULAR_MONACO_EDITOR_CONFIG = new InjectionToken('ANGULAR_MONACO_E
 
 export interface AngularMonacoEditorConfig {
   baseUrl?: string;
-  defaultOptions?: { [key: string]: any; },
+  defaultOptions?: { [key: string]: any; };
   onMonacoLoad?: Function;
 }

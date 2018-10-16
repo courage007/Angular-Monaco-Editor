@@ -14,7 +14,7 @@ export class CodeEditorEventService {
      * 设置启用事件
      * @param  事件
      */
-    addEvent(event){
+    addEvent(event) {
         assign(this._events, event);
         // console.log(this.events);
     }

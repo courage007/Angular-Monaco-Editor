@@ -6,7 +6,7 @@ import { AngularMonacoEditorModule } from '../../lib/editor/editor.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';  //import FormsModule to make ngModel attr work
 
-import * as monaco from 'monaco-editor';
+declare const monaco: any;
 
 const monacoConfig: AngularMonacoEditorConfig = {
   baseUrl: 'assets',
@@ -45,6 +45,23 @@ const monacoConfig: AngularMonacoEditorConfig = {
         }
       }]
     });
+
+
+    monaco.languages.registerDocumentFormattingEditProvider('json', {
+      provideDocumentFormattingEdits: function (model, options, token) {
+          return [
+              {
+                  range: {
+                      startLineNumber: 1,
+                      startColumn: 1,
+                      endLineNumber: 1,
+                      endColumn: 1
+                  },
+                  text: 'a'
+              }
+          ];
+      }
+  });
 
   }
 };

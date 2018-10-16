@@ -7,5 +7,5 @@
     right: 0px;
 }
 .editorPanel .customMonacoEditor { /*set automaticLayout*/
-    height: calc(100vh - 0px);
+    height: 200px
 }

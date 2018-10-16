@@ -12,8 +12,12 @@ export class AppComponent {
 
   showMultiple = true;
   options = {
-    theme: 'vs-dark',
-    language: 'javascript',
+    theme: 'vs-dark',                    // 代码编辑器主题
+    language: 'json',                    // 语言
+    formatOnType: true,                  // 启用格式化（暂不可用）
+    foldingStrategy: 'indentation',      // 显示缩进
+    folding: true,                       // 启用代码折叠功能
+    showFoldingControls: 'always'        // 默认显示装订线
   };
   
   setCode(){
@@ -35,7 +39,8 @@ export class AppComponent {
   jsonCode = [
     '{',
     '    "p1": "v3",',
-    '    "p2": false',
+    '    "p2": false,',
+    '             "p3": true',
     '}'
   ].join('\n');
 

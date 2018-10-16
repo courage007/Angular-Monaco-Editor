@@ -5,3 +5,6 @@
     left: 0px;
     right: 0px;
 }
+.editorPanel .customMonacoEditor { /*set automaticLayout*/
+    height: calc(100vh - 0px);
+}

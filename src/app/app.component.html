@@ -11,11 +11,9 @@
 </div>
 
 <div class="editorPanel">
-    <angular-monaco-editor [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
+    <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="jsonCode" (onInit)="onInitHandler($event)"
         (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
 </div>
-
-
 
 <!-- <div class="editorPanel2">
     <angular-monaco-editor [(ngModel)]="jsonCode" ></angular-monaco-editor>

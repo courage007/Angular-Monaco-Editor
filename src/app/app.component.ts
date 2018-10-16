@@ -13,7 +13,8 @@ export class AppComponent {
   showMultiple = true;
   options = {
     theme: 'vs-dark',
-    language: 'javascript',
+    language: 'json',
+    formOnType: true
   };
 
   setCode() {
@@ -37,7 +38,8 @@ export class AppComponent {
   jsonCode = [
     '{',
     '    "p1": "v3",',
-    '    "p2": false',
+    '    "p2": false,',
+    '"p3": false',
     '}'
   ].join('\n');
 
