@@ -1,7 +1,6 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { assign } from 'lodash';
-import { pick } from 'lodash';
 
 import { CODE_EDITOR_EVENTS } from '../constants/events';
 
