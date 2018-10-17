@@ -6,6 +6,9 @@ import * as monaco from 'monaco-editor';
 import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
 
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './/app-routing.module';
+import { InitEditorComponent } from './init/init-editor.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 const monacoConfig: AngularMonacoEditorConfig = {
   baseUrl: 'assets',
@@ -50,12 +53,15 @@ const monacoConfig: AngularMonacoEditorConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    NavbarComponent,
+    AppComponent,
+    InitEditorComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
-    AngularMonacoEditorModule.forRoot(monacoConfig)
+    AngularMonacoEditorModule.forRoot(monacoConfig),
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

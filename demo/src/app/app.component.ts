@@ -1,83 +1,15 @@
-import { Component } from '@angular/core';
-import { AngularEditorModel } from 'angular-monaco-editor';
+import { Component, OnInit, ViewChild, Compiler, NgModuleFactory, Type } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  // editor: any;
-  // toggleLanguage = true;
 
-  showMultiple = true;
-  options = {
-    theme: 'vs-dark',                    // 代码编辑器主题
-    language: 'json',                    // 语言
-    formatOnType: true,                  // 启用格式化（暂不可用）
-    foldingStrategy: 'indentation',      // 显示缩进
-    folding: true,                       // 启用代码折叠功能
-    showFoldingControls: 'always'        // 默认显示装订线
-  };
-  
-  setCode(){
-    this.code = 'Code changed from the app component.';
-  }
-
-  //todo: 替换成动态数据（通过服务获取的外部数据）
-  code;
-  // cssCode = `.my-class {
-  //   color: red;
-  // }`;
-  
-  jsCode = `function hello() {
-    alert('Hello world!');
-    alert('foo1');
-    alert('foo2');
-  }`;
-
-  jsonCode = [
-    '{',
-    '    "p1": "v3",',
-    '    "p2": false,',
-    '             "p3": true',
-    '}'
-  ].join('\n');
-
-  model: AngularEditorModel = {
-    value: this.jsonCode,
-    language: 'json',
-    uri: 'foo.json'
-  };
-
+export class AppComponent implements OnInit {
+  title = 'app';
   ngOnInit() {
-    this.updateOptions();
-  }
-
-  updateOptions() {
-    // this.code = this.jsCode;
-  }
-
-  // Add Event Handler
-  onInitHandler(event: any){
-    console.log(event);
     
-    //   this.editor = editor;
-    //   console.log(editor);
-    //   // let line = editor.getPosition();
-    //   // let range = new monaco.Range(line.lineNumber, 1, line.lineNumber, 1);
-    //   // let id = { major: 1, minor: 1 };
-    //   // let text = 'FOO';
-    //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
-    //   // editor.executeEdits("my-source", [op]);
   }
-
-  onChangeHandler(event: any){
-    console.log(event);
-  }
-
-  onTouchedHandler(event: any){
-    console.log(event);
-  }
-
 }

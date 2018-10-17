@@ -1,0 +1,6 @@
+<ul class="list-group">
+  <li class="list-group-item text-center" *ngFor="let navbarItem of navbarItems;">
+    <a [routerLink]="navbarItem.itemLink">{{navbarItem.itemName}}</a>
+  </li>
+</ul>
+

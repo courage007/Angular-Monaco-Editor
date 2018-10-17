@@ -1,4 +1,8 @@
-<div class="editorPanel">
-    <div>code:{{code}}</div>
-    <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="jsonCode" (onInit)="onInitHandler($event)"></angular-monaco-editor>
+<div class="ediotor-demo">
+    <div class="custom-navigator">
+        <app-navbar></app-navbar>
+    </div>
+    <div class="custom-router">
+        <router-outlet></router-outlet>
+    </div>
 </div>
