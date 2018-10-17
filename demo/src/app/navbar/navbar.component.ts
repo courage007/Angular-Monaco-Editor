@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { APP_ROUTE_PATH } from '../app-routing-path';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,8 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.navbarItems = [
-      new NavbarItem('初始化编辑器', '/init')
+      new NavbarItem('基本初始化', APP_ROUTE_PATH.baseInit),
+      new NavbarItem('模型初始化', APP_ROUTE_PATH.modelInit)
     ];
   }
   

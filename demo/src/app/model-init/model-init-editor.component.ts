@@ -1,36 +1,33 @@
-import { Component } from '@angular/core';
-import { AngularEditorModel } from '../../lib/editor/types';
+import { Component, OnInit } from '@angular/core';
+import { AngularEditorModel } from 'angular-monaco-editor';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-model-init-editor',
+  templateUrl: './model-init-editor.component.html',
+  styleUrls: ['./model-init-editor.component.css']
 })
-export class AppComponent {
-  // editor: any;
-  // toggleLanguage = true;
+export class ModelInitEditorComponent implements OnInit {
 
   showMultiple = true;
   options = {
-    theme: 'vs-dark',
-    language: 'json',
-    formOnType: true
+    theme: 'vs-dark',                    // 代码编辑器主题
+    language: 'json',                    // 语言
+    formatOnType: true,                  // 启用格式化（暂不可用）
+    foldingStrategy: 'indentation',      // 显示缩进
+    folding: true,                       // 启用代码折叠功能
+    showFoldingControls: 'always'        // 默认显示装订线
   };
-
-
-
-  setCode() {
+  
+  setCode(){
     this.code = 'Code changed from the app component.';
   }
 
   //todo: 替换成动态数据（通过服务获取的外部数据）
-  code: string = `
-    function foo() {
-      alert('Hello');
-      alert('World');
-      alert('Hello World.');
-  `;
-
+  code;
+  // cssCode = `.my-class {
+  //   color: red;
+  // }`;
+  
   jsCode = `function hello() {
     alert('Hello world!');
     alert('foo1');
@@ -41,11 +38,11 @@ export class AppComponent {
     '{',
     '    "p1": "v3",',
     '    "p2": false,',
-    '"p3": false',
+    '             "p3": true',
     '}'
   ].join('\n');
 
-  model: AngularEditorModel  = {
+  model: AngularEditorModel = {
     value: this.jsonCode,
     language: 'json',
     uri: 'foo.json'
@@ -56,13 +53,13 @@ export class AppComponent {
   }
 
   updateOptions() {
-    this.code = this.jsCode;
+    // this.code = this.jsCode;
   }
 
   // Add Event Handler
-  onInitHandler(event: any) {
+  onInitHandler(event: any){
     console.log(event);
-
+    
     //   this.editor = editor;
     //   console.log(editor);
     //   // let line = editor.getPosition();
@@ -73,11 +70,11 @@ export class AppComponent {
     //   // editor.executeEdits("my-source", [op]);
   }
 
-  onChangeHandler(event: any) {
-    console.log('Changing:' + event);
+  onChangeHandler(event: any){
+    console.log(event);
   }
 
-  onTouchedHandler(event: any) {
+  onTouchedHandler(event: any){
     console.log(event);
   }
 

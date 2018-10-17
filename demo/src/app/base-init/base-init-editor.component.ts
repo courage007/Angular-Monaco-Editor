@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AngularEditorModel } from 'angular-monaco-editor';
 
 @Component({
-  selector: 'app-init-editor',
-  templateUrl: './init-editor.component.html',
-  styleUrls: ['./init-editor.component.css']
+  selector: 'app-base-init-editor',
+  templateUrl: './base-init-editor.component.html',
+  styleUrls: ['./base-init-editor.component.css']
 })
-export class InitEditorComponent implements OnInit {
+export class BaseInitEditorComponent implements OnInit {
 
   showMultiple = true;
   options = {
