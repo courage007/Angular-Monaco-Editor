@@ -1,8 +1,6 @@
-import { Component, OnInit, AfterViewInit, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-
 
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 import { CodeEditorEventService } from '../services/code-editor.event.service';
@@ -35,6 +33,15 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
 // 自定义输入控件:3.1 implements ControlValueAccessor
 export class AngularMonacoEditorComponent extends BaseMonacoEditor implements ControlValueAccessor {
 
+  @Input('model')
+  set model(model: AngularEditorModel) {
+    this.options.model = model;
+    if (this._editor) {
+      this._editor.dispose();
+      this.initMonaco(this.options);
+    }
+  }
+
   // protected _windowResizeSubscription: Subscription;
   private _value = '';
 
@@ -44,7 +51,7 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
   }
 
   protected initMonaco(options: any): void {
-    const hasModel = options.model;
+    const hasModel = !!options.model;
 
     if (hasModel) {
       options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
