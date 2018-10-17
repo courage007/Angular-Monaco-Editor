@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularEditorModel } from '../../lib/editor/types';
+import { AngularMonacoEditorConfig } from '../../lib/editor';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,8 @@ export class AppComponent {
     language: 'json',
     formOnType: true
   };
+
+
 
   setCode() {
     this.code = 'Code changed from the app component.';
@@ -43,7 +46,7 @@ export class AppComponent {
     '}'
   ].join('\n');
 
-  model: AngularEditorModel = {
+  model: AngularEditorModel  = {
     value: this.jsonCode,
     language: 'json',
     uri: 'foo.json'

@@ -3,7 +3,7 @@
     <angular-monaco-editor [(ngModel)] = "code"></angular-monaco-editor>
 </div> -->
 <div class="dataShow">
-    <pre>Data in the app: {{code}}</pre>
+    <pre>Data in the app: {{jsonCode}}</pre>
 </div>
     
 <div class="setCode">
@@ -11,7 +11,7 @@
 </div>
 
 <div class="editorPanel">
-    <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="code" (onInit)="onInitHandler($event)"
+    <angular-monaco-editor class="customMonacoEditor" [options]="options"[(ngModel)]="jsonCode" [model]="model" (onInit)="onInitHandler($event)"
         (onTouched)="onTouchedHandler($event)" (onChange)="onChangeHandler($event)"></angular-monaco-editor>
 </div>
 
