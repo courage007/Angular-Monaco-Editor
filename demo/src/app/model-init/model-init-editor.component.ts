@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularEditorModel } from 'angular-monaco-editor';
 
+declare const monaco;
+
 @Component({
   selector: 'app-model-init-editor',
   templateUrl: './model-init-editor.component.html',
   styleUrls: ['./model-init-editor.component.css']
 })
+
 export class ModelInitEditorComponent implements OnInit {
 
-  showMultiple = true;
   options = {
     theme: 'vs-dark',                    // 代码编辑器主题
     language: 'json',                    // 语言
@@ -17,22 +19,6 @@ export class ModelInitEditorComponent implements OnInit {
     folding: true,                       // 启用代码折叠功能
     showFoldingControls: 'always'        // 默认显示装订线
   };
-  
-  setCode(){
-    this.code = 'Code changed from the app component.';
-  }
-
-  //todo: 替换成动态数据（通过服务获取的外部数据）
-  code;
-  // cssCode = `.my-class {
-  //   color: red;
-  // }`;
-  
-  jsCode = `function hello() {
-    alert('Hello world!');
-    alert('foo1');
-    alert('foo2');
-  }`;
 
   jsonCode = [
     '{',
@@ -47,35 +33,36 @@ export class ModelInitEditorComponent implements OnInit {
     language: 'json',
     uri: 'foo.json'
   };
-
-  ngOnInit() {
-    this.updateOptions();
+  _editor: any; // 编辑器指针
+  get Editor() {
+    return this._editor;
+  }
+  set Editor(value) {
+    this._editor = value;
   }
 
-  updateOptions() {
-    // this.code = this.jsCode;
+  ngOnInit() {
+
   }
 
   // Add Event Handler
-  onInitHandler(event: any){
-    console.log(event);
-    
-    //   this.editor = editor;
-    //   console.log(editor);
-    //   // let line = editor.getPosition();
-    //   // let range = new monaco.Range(line.lineNumber, 1, line.lineNumber, 1);
-    //   // let id = { major: 1, minor: 1 };
-    //   // let text = 'FOO';
-    //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
-    //   // editor.executeEdits("my-source", [op]);
+  onInitHandler(event: any) {
+    this.Editor = event.editor;
+
+    this.Editor.onDidBlurEditorText((e: any) => this.onBlurEditorTextHandler(e));
   }
 
-  onChangeHandler(event: any){
-    console.log(event);
-  }
+  onBlurEditorTextHandler(e) {
 
-  onTouchedHandler(event: any){
-    console.log(event);
+    // https://github.com/Microsoft/monaco-editor/issues/30
+    const setModelMarkers = monaco.editor.setModelMarkers;
+    monaco.editor.setModelMarkers = function (model, owner, markers) {
+      setModelMarkers.call(monaco.editor, model, owner, markers);
+      if (markers.length === 0) {
+        // there are no errors(synx error and validate error)
+      } else {
+        // there are errors
+      }
+    };
   }
-
 }
