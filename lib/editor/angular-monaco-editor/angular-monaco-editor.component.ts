@@ -80,7 +80,6 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
       target: this,
       editor: this._editor
     });
-
   }
 
   onChangeModelContentHandler(e) {
@@ -124,13 +123,15 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
 
   // From ControlValueAccessor interface
   writeValue(value: any) {
-    this.value = value || '';
+    const self = this;
+    self.value = value || '';
 
     // Fix for value change while dispose in process.
     setTimeout(() => {
-      if (this._editor /*&& !this.options.model*/) {
-        this._editor.setValue(this._value);
+      if (self._editor /*&& !this.options.model*/) {
+        self._editor.setValue(self._value);
         // console.log("write to the editor:" + this._value);
+        // self._editor.getAction('editor.action.formatDocument').run().then(() => console.log('finished when write value'));
       }
     });
   }

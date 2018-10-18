@@ -10,6 +10,7 @@ import { BaseInitEditorComponent } from './base-init/base-init-editor.component'
 
 import { NavbarComponent } from './navbar/navbar.component';
 import { ModelInitEditorComponent } from './model-init/model-init-editor.component';
+import { FormatInitEditorComponent } from './format-init/format-init-editor.component';
 
 declare const monaco;
 
@@ -18,7 +19,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
   defaultOptions: { scrollBeyondLastLine: false },
   onMonacoLoad: () => {
 
-    const id = "foo.json";
+    const id = 'foo.json';
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
       schemas: [{
@@ -28,21 +29,21 @@ const monacoConfig: AngularMonacoEditorConfig = {
           type: "object",
           properties: {
             p1: {
-              enum: [ "v1", "v2"]
+              enum: ["v1", "v2"]
             },
             p2: {
               $ref: "http://myserver/bar-schema.json"
             }
           }
         }
-      },{
+      }, {
         uri: "http://myserver/bar-schema.json",
         fileMatch: [id],
         schema: {
           type: "object",
           properties: {
             q1: {
-              enum: [ "x1", "x2"]
+              enum: ["x1", "x2"]
             }
           }
         }
@@ -54,6 +55,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
 
 @NgModule({
   declarations: [
+    FormatInitEditorComponent,
     ModelInitEditorComponent,
     NavbarComponent,
     BaseInitEditorComponent,

@@ -16,10 +16,10 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.navbarItems = [
       new NavbarItem('基本初始化', APP_ROUTE_PATH.baseInit),
-      new NavbarItem('模型初始化', APP_ROUTE_PATH.modelInit)
+      new NavbarItem('模型初始化', APP_ROUTE_PATH.modelInit),
+      new NavbarItem('格式初始化', APP_ROUTE_PATH.formatInit)
     ];
   }
-  
 }
 
 class NavbarItem {

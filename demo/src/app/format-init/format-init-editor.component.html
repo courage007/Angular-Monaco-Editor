@@ -1,0 +1,9 @@
+<div class="modelInitEditor">
+  <div class="dataShow">
+    <pre>Data in the app: {{jsonCode}}</pre>
+  </div>
+  
+  <div class="editorPanel">
+    <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="jsonCode" [model]="model" (onInit)="onInitHandler($event)"></angular-monaco-editor>
+  </div>
+</div>

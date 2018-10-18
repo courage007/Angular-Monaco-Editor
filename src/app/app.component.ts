@@ -17,13 +17,17 @@ export class AppComponent {
     formOnType: true
   };
 
-
-
   setCode() {
-    this.code = 'Code changed from the app component.';
+    this.jsonCode = [
+      '{',
+      '"pp": false,',
+      '    "p2": false,',
+      '"p3": false',
+      '}'
+    ].join('\n');
   }
 
-  //todo: 替换成动态数据（通过服务获取的外部数据）
+  // todo: 替换成动态数据（通过服务获取的外部数据）
   code: string = `
     function foo() {
       alert('Hello');

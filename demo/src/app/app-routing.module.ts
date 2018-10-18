@@ -3,23 +3,26 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseInitEditorComponent } from './base-init/base-init-editor.component';
 import { APP_ROUTE_PATH } from './app-routing-path';
 import { ModelInitEditorComponent } from './model-init/model-init-editor.component';
+import { FormatInitEditorComponent } from './format-init/format-init-editor.component';
 
 const demosRoute: Routes = [
   { // 组件
     path: APP_ROUTE_PATH.baseInit,
     component: BaseInitEditorComponent
-  },
-  {
+  }, {
     path: APP_ROUTE_PATH.modelInit,
     component: ModelInitEditorComponent
-  }
-]
+  }, {
+    path: APP_ROUTE_PATH.formatInit,
+    component: FormatInitEditorComponent
+  },
+];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(demosRoute)
   ],
-  exports: [ 
+  exports: [
     RouterModule
   ]
 })
