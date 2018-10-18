@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { fromEvent } from 'rxjs/observable/fromEvent';
 
 import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
 import { CodeEditorEventService } from '../services/code-editor.event.service';
@@ -42,7 +43,6 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     }
   }
 
-  // protected _windowResizeSubscription: Subscription;
   private _value = '';
 
   // tslint:disable-next-line:max-line-length
@@ -71,15 +71,26 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     this._editor.onDidLayoutChange((e: any) => this.onLayoutChangeHandler(e));
 
     // refresh layout on resize event.
-    // if (this._windowResizeSubscription) {
-    //   this._windowResizeSubscription.unsubscribe();
-    // }
-    // this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
+    this.refreshLayoutWhenWindowResize();
+    
     this.editorEventService.fireEvent({
       eventName: CODE_EDITOR_EVENTS.onInit,
       target: this,
       editor: this._editor
     });
+
+  }
+
+  /**
+   * refresh layout when resized the window
+   */
+  refreshLayoutWhenWindowResize(){
+    if (this._windowResizeSubscription) {
+      this._windowResizeSubscription.unsubscribe();
+    }
+    // fromEvent用于兼听事件，事件触发时，将事件event转成可流动的Observable进行传输
+    // https://www.jianshu.com/p/46894deb870a
+    this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
   }
 
   onChangeModelContentHandler(e) {
@@ -130,8 +141,6 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     setTimeout(() => {
       if (self._editor /*&& !this.options.model*/) {
         self._editor.setValue(self._value);
-        // console.log("write to the editor:" + this._value);
-        // self._editor.getAction('editor.action.formatDocument').run().then(() => console.log('finished when write value'));
       }
     });
   }

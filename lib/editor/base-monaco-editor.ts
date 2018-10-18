@@ -1,4 +1,5 @@
 import { AfterViewInit, ElementRef, Input, OnDestroy, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { pick } from 'lodash';
 
@@ -12,7 +13,7 @@ export abstract class BaseMonacoEditor implements AfterViewInit, OnDestroy {
 
   protected _editor: any;
   private _options: any;
-  // protected _windowResizeSubscription: Subscription;
+  protected _windowResizeSubscription: Subscription;
 
   @ViewChild('codeEditor') _editorComponent: ElementRef; // 动态添加代码编辑器
 
@@ -87,6 +88,10 @@ export abstract class BaseMonacoEditor implements AfterViewInit, OnDestroy {
   protected abstract initMonaco(options: any): void ;
 
   ngOnDestroy() {
+    if (this._windowResizeSubscription) {
+      this._windowResizeSubscription.unsubscribe();
+    }
+
     if (this._editor) {
       this._editor.dispose();
       this._editor = undefined;
