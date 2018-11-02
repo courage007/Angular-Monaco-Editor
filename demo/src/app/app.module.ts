@@ -11,6 +11,7 @@ import { BaseInitEditorComponent } from './base-init/base-init-editor.component'
 import { NavbarComponent } from './navbar/navbar.component';
 import { ModelInitEditorComponent } from './model-init/model-init-editor.component';
 import { FormatInitEditorComponent } from './format-init/format-init-editor.component';
+import { ModelInitWithMarkerEditorComponent } from './model-init-with-marker/model-init-with-marker-editor.component';
 
 declare const monaco;
 
@@ -55,6 +56,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
 
 @NgModule({
   declarations: [
+    ModelInitWithMarkerEditorComponent,
     FormatInitEditorComponent,
     ModelInitEditorComponent,
     NavbarComponent,

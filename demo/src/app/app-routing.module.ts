@@ -4,6 +4,7 @@ import { BaseInitEditorComponent } from './base-init/base-init-editor.component'
 import { APP_ROUTE_PATH } from './app-routing-path';
 import { ModelInitEditorComponent } from './model-init/model-init-editor.component';
 import { FormatInitEditorComponent } from './format-init/format-init-editor.component';
+import { ModelInitWithMarkerEditorComponent } from './model-init-with-marker/model-init-with-marker-editor.component';
 
 const demosRoute: Routes = [
   { // 组件
@@ -15,6 +16,9 @@ const demosRoute: Routes = [
   }, {
     path: APP_ROUTE_PATH.formatInit,
     component: FormatInitEditorComponent
+  }, {
+    path: APP_ROUTE_PATH.modelInitWithMarker,
+    component: ModelInitWithMarkerEditorComponent
   },
 ];
 
