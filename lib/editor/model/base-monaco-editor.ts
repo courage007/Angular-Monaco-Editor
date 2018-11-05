@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { pick } from 'lodash';
 
 import { AngularMonacoEditorConfig } from './config';
-import { CodeEditorEventService } from './services/code-editor.event.service';
+import { CodeEditorEventService } from '../service/code-editor.event.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;

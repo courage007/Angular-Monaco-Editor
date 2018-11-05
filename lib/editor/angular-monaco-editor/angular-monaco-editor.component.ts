@@ -3,11 +3,11 @@ import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 
-import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../config';
-import { CodeEditorEventService } from '../services/code-editor.event.service';
-import { CODE_EDITOR_EVENTS } from '../constants/events';
-import { AngularEditorModel } from '../types';
-import { BaseMonacoEditor } from '../base-monaco-editor';
+import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from '../model/config';
+import { CodeEditorEventService } from '../service/code-editor.event.service';
+import { CODE_EDITOR_EVENTS } from '../constant/events';
+import { AngularEditorModel } from '../model/types';
+import { BaseMonacoEditor } from '../model/base-monaco-editor';
 
 declare const monaco: any;
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { assign } from 'lodash';
 
-import { CODE_EDITOR_EVENTS } from '../constants/events';
+import { CODE_EDITOR_EVENTS } from '../constant/events';
 
 @Injectable()
 export class CodeEditorEventService {

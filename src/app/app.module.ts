@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AngularMonacoEditorConfig } from '../../lib/editor/config';
+import { AngularMonacoEditorConfig } from '../../lib/editor/model/config';
 import { AngularMonacoEditorModule } from '../../lib/editor/editor.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';  // import FormsModule to make ngModel attr work

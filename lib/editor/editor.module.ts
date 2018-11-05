@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from './config';
+import { ANGULAR_MONACO_EDITOR_CONFIG, AngularMonacoEditorConfig } from './model/config';
 import { AngularMonacoEditorComponent } from './angular-monaco-editor/angular-monaco-editor.component';
 
 @NgModule({
