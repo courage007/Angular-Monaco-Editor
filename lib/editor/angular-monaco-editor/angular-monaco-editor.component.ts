@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { forwardRef, Inject, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -8,6 +8,7 @@ import { CodeEditorEventService } from '../service/code-editor.event.service';
 import { CODE_EDITOR_EVENTS } from '../constant/events';
 import { AngularEditorModel } from '../model/types';
 import { BaseMonacoEditor } from '../model/base-monaco-editor';
+import { AngularMonacoEditorService } from '../service/angular-monaco-editor.service';
 
 declare const monaco: any;
 
@@ -26,7 +27,10 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
   templateUrl: './angular-monaco-editor.component.html',
   styleUrls: ['./angular-monaco-editor.component.css'],
   // 自定义输入控件:2.引入依赖服务ControlValueAccessor
-  providers: [CODE_EDITOR_INPUT_VALUE_ACCESSOR, CodeEditorEventService]
+  providers: [
+    CODE_EDITOR_INPUT_VALUE_ACCESSOR, 
+    CodeEditorEventService
+  ]
 })
 
 // 自定义输入控件 <-> Monaco Edtor
@@ -46,7 +50,10 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
   private _value = '';
 
   // tslint:disable-next-line:max-line-length
-  constructor(private zone: NgZone, private editorEventService: CodeEditorEventService, @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private angularEditorconfig: AngularMonacoEditorConfig) {
+  constructor(private angularMonacoEditorService: AngularMonacoEditorService,
+    private zone: NgZone,
+    private editorEventService: CodeEditorEventService,
+    @Inject(ANGULAR_MONACO_EDITOR_CONFIG) private angularEditorconfig: AngularMonacoEditorConfig) {
     super(editorEventService, angularEditorconfig);
   }
 
@@ -72,19 +79,23 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
 
     // refresh layout on resize event.
     this.refreshLayoutWhenWindowResize();
-    
+
     this.editorEventService.fireEvent({
       eventName: CODE_EDITOR_EVENTS.onInit,
       target: this,
       editor: this._editor
     });
 
+    if (hasModel) {
+      this.angularMonacoEditorService.handleModelMarkers();
+    }
+
   }
 
   /**
    * refresh layout when resized the window
    */
-  refreshLayoutWhenWindowResize(){
+  refreshLayoutWhenWindowResize() {
     if (this._windowResizeSubscription) {
       this._windowResizeSubscription.unsubscribe();
     }
@@ -122,10 +133,6 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     }
 
     this.onControlValueChange(this.value); // 在属性修饰器里调用onControlValueChange方法
-  }
-
-  localEditor() {// Demo: outside component -> monaco editor
-    this.writeValue('test');
   }
 
   // 自定义输入控件:3.2 implements ControlValueAccesso

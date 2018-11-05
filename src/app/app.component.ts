@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { AngularEditorModel } from '../../lib/editor/model/types';
+import { AngularMonacoEditorService } from '../../lib/editor/service/angular-monaco-editor.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [
+    AngularMonacoEditorService
+  ],
 })
 export class AppComponent {
   // editor: any;
@@ -16,6 +20,9 @@ export class AppComponent {
     language: 'json',
     formOnType: true
   };
+  constructor(private angularMonacoEditorService: AngularMonacoEditorService) {
+
+  }
 
   setCode() {
     this.jsonCode = [
@@ -49,7 +56,7 @@ export class AppComponent {
     '}'
   ].join('\n');
 
-  model: AngularEditorModel  = {
+  model: AngularEditorModel = {
     value: this.jsonCode,
     language: 'json',
     uri: 'foo.json'
@@ -63,6 +70,7 @@ export class AppComponent {
     this.code = this.jsCode;
   }
 
+  editor: any;
   // Add Event Handler
   onInitHandler(event: any) {
     console.log(event);
@@ -75,6 +83,20 @@ export class AppComponent {
     //   // let text = 'FOO';
     //   // let op = { identifier: id, range: range, text: text, forceMoveMarkers: true };
     //   // editor.executeEdits("my-source", [op]);
+
+    // console.log('测试前'+ this.angularMonacoEditor.testField);
+    // this.angularMonacoEditor.testField = true;
+    // console.log('测试后'+ this.angularMonacoEditor.testField);
+    this.editor = event.editor;
+    this.editor.onDidBlurEditorText(() => this.onBlurEditorTextHandler());
+  }
+
+  onBlurEditorTextHandler() {
+    if (this.angularMonacoEditorService.existError) {
+      // 将焦点停留在编辑器
+      console.log('将焦点停留在编辑器');
+      this.editor.focus();
+    }
   }
 
   onChangeHandler(event: any) {
