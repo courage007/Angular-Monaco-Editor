@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularEditorModel } from 'angular-monaco-editor';
+import { AngularMonacoEditorService } from 'angular-monaco-editor';
 
 declare const monaco;
 
@@ -20,7 +21,10 @@ declare const monaco;
     .customMonacoEditor {
       height: 400px
     }
-  `] 
+  `],
+  providers: [
+    AngularMonacoEditorService
+  ]
 })
 
 export class ModelInitWithMarkerEditorComponent implements OnInit {
@@ -48,12 +52,17 @@ export class ModelInitWithMarkerEditorComponent implements OnInit {
     uri: 'foo.json'
   };
   _editor: any; // 编辑器指针
-  get Editor() {
+  get editor() {
     return this._editor;
   }
-  set Editor(value) {
+  set editor(value) {
     this._editor = value;
   }
+
+  constructor(private angularMonacoEditorService: AngularMonacoEditorService) {
+
+  }
+
 
   ngOnInit() {
 
@@ -61,36 +70,14 @@ export class ModelInitWithMarkerEditorComponent implements OnInit {
 
   // Add Event Handler
   onInitHandler(event: any) {
-    this.Editor = event.editor;
-    this.handerMarkers();
-    this.Editor.onDidBlurEditorText(() => this.onBlurEditorTextHandler());
-    // this.Editor.getModel().onDidChangeContent((e: any) => this.onBlurEditorTextHandler(e));
+    this.editor = event.editor;
+    this.editor.onDidBlurEditorText(() => this.onBlurEditorTextHandler());
   }
 
   onBlurEditorTextHandler() {
-    if (this.existError) {
-      // 将焦点停留在编辑器
-      this.Editor.focus();
+    if (this.angularMonacoEditorService.existError) {
+      console.log('Focus still on the editor until error is fixed.');
+      this.editor.focus();
     }
   }
-
-  existError = false;
-  handerMarkers() {
-    var self = this;
-    // https://github.com/Microsoft/monaco-editor/issues/30
-    const setModelMarkers = monaco.editor.setModelMarkers;
-    monaco.editor.setModelMarkers = function (model, owner, markers) {
-      setModelMarkers.call(monaco.editor, model, owner, markers);
-      if (markers.length === 0) {
-        // there are no errors(synx error and validate error)
-        console.log('continue');
-      } else {
-        // there are errors
-        // console.log('error');
-        // alert('JSON SCHEMA校验未通过');
-        self.existError = true;
-      }
-    };
-  }
-
 }
