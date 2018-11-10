@@ -28,8 +28,8 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
   styleUrls: ['./angular-monaco-editor.component.css'],
   // 自定义输入控件:2.引入依赖服务ControlValueAccessor
   providers: [
-    CODE_EDITOR_INPUT_VALUE_ACCESSOR, 
-    CodeEditorEventService
+    CODE_EDITOR_INPUT_VALUE_ACCESSOR,
+    CodeEditorEventService,
   ]
 })
 
@@ -57,17 +57,26 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     super(editorEventService, angularEditorconfig);
   }
 
+  // todo: 提取options公共类
   protected initMonaco(options: any): void {
-    const hasModel = !!options.model;
+    const enableModel = !!options.model;
+    if (enableModel) {
+      const searchedModel = monaco.editor.getModel(options.model.uri);
+      if (null !== searchedModel) {
+        searchedModel.dispose();
+      }
 
-    if (hasModel) {
       options.model = monaco.editor.createModel(options.model.value, options.model.language, options.model.uri);
     }
 
     this._editor = monaco.editor.create(this._editorComponent.nativeElement, options);
 
-    if (!hasModel) {
+    if (!enableModel) {
       this._editor.setValue(this._value);
+    }
+    
+    if (enableModel) {
+      this.angularMonacoEditorService.handleModelMarkers();
     }
 
     // monaco editor -> outside component
@@ -85,11 +94,6 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
       target: this,
       editor: this._editor
     });
-
-    if (hasModel) {
-      this.angularMonacoEditorService.handleModelMarkers();
-    }
-
   }
 
   /**

@@ -22,8 +22,8 @@ declare const monaco;
       height: 400px
     }
   `],
-  providers: [
-    AngularMonacoEditorService
+  providers:[
+    // AngularMonacoEditorService
   ]
 })
 
@@ -62,7 +62,6 @@ export class ModelInitWithMarkerEditorComponent implements OnInit {
   constructor(private angularMonacoEditorService: AngularMonacoEditorService) {
 
   }
-
 
   ngOnInit() {
 

@@ -16,14 +16,17 @@ export class FormatInitEditorComponent implements OnInit {
     autoIndent: true
   };
 
-  jsonCode = [
+  jsonOriginCode = [
     '{',
     '             "p3": true',
     '}'
   ].join('\n');
+  
+  // https://msdn.microsoft.com/zh-cn/library/cc836459(v=vs.94).aspx
+  jsonFormatCode = JSON.stringify(JSON.parse(this.jsonOriginCode), undefined , 4);
 
   model: AngularEditorModel = {
-    value: this.jsonCode,
+    value: this.jsonFormatCode,
     language: 'json',
     uri: 'foo.json'
   };
@@ -52,10 +55,10 @@ export class FormatInitEditorComponent implements OnInit {
     // this.Editor.trigger('anyString', 'editor.action.formatDocument');
     this.updateOptions();
 
-    // format editor’s content after initialized
-    setTimeout(() => {
-      this.Editor.getAction('editor.action.formatDocument').run().then(this.afterFormatDocument);
-    }, 200);
+    // // format editor’s content after initialized
+    // setTimeout(() => {
+    //   this.Editor.getAction('editor.action.formatDocument').run().then(this.afterFormatDocument);
+    // }, 300);
   }
 
   afterFormatDocument() {

@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, Compiler, NgModuleFactory, Type } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
