@@ -10,7 +10,7 @@ import { AngularEditorModel } from 'angular-monaco-editor';
 export class FormatInitEditorComponent implements OnInit {
 
   options = {
-    theme: 'vs-dark',                    // 代码编辑器主题
+    theme: 'vs',                    // 代码编辑器主题
     language: 'json',                    // 语言
     automaticLayout: true,
     autoIndent: true
@@ -20,7 +20,7 @@ export class FormatInitEditorComponent implements OnInit {
     '{',
     '             "p3": true',
     '}'
-  ].join('\n');
+  ].join('\n');s
   
   // https://msdn.microsoft.com/zh-cn/library/cc836459(v=vs.94).aspx
   jsonFormatCode = JSON.stringify(JSON.parse(this.jsonOriginCode), undefined , 4);

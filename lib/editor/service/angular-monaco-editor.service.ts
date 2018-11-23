@@ -19,6 +19,7 @@ export class AngularMonacoEditorService {
         monaco.editor.setModelMarkers = function (model, owner, markers) {
             setModelMarkers.call(monaco.editor, model, owner, markers);
             if (markers.length === 0) {
+                self._existError = false;
                 // there are no errors(synx error and validate error)
                 // console.log('continue');
             } else {

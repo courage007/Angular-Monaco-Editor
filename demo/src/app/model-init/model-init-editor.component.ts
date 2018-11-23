@@ -53,6 +53,7 @@ export class ModelInitEditorComponent implements OnInit {
   }
 
   onBlurEditorTextHandler(e) {
+    var self = this;
 
     // https://github.com/Microsoft/monaco-editor/issues/30
     const setModelMarkers = monaco.editor.setModelMarkers;
@@ -62,6 +63,7 @@ export class ModelInitEditorComponent implements OnInit {
         // there are no errors(synx error and validate error)
       } else {
         // there are errors
+        self.Editor && self.Editor.focus();
       }
     };
   }

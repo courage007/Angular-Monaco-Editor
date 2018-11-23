@@ -12,7 +12,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ModelInitEditorComponent } from './model-init/model-init-editor.component';
 import { FormatInitEditorComponent } from './format-init/format-init-editor.component';
 import { ModelInitWithMarkerEditorComponent } from './model-init-with-marker/model-init-with-marker-editor.component';
-import { AngularMonacoEditorService } from 'angular-monaco-editor';
+import { TwoEditorsComponent } from './two-editors/two-editors.component';
 
 declare const monaco;
 
@@ -57,6 +57,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
 
 @NgModule({
   declarations: [
+    TwoEditorsComponent,
     ModelInitWithMarkerEditorComponent,
     FormatInitEditorComponent,
     ModelInitEditorComponent,
@@ -71,7 +72,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
     AppRoutingModule
   ],
   providers: [
-    AngularMonacoEditorService
+    
   ],
   bootstrap: [AppComponent]
 })

@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
       new NavbarItem('格式初始化（format init）', APP_ROUTE_PATH.formatInit),
       new NavbarItem('模型初始化（model init）', APP_ROUTE_PATH.modelInit),
       new NavbarItem('模型初始化且设置marker（model init with set marker）', APP_ROUTE_PATH.modelInitWithMarker),
+      new NavbarItem('多实例兼容', APP_ROUTE_PATH.twoEditors),
     ];
   }
 }
