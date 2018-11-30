@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, Input, OnDestroy, Output, ViewChild, EventEmitter } from '@angular/core';
+import { AfterViewInit, ElementRef, Input, OnDestroy, Output, ViewChild, EventEmitter, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { pick } from 'lodash';
@@ -15,11 +15,12 @@ export abstract class BaseMonacoEditor implements AfterViewInit, OnDestroy {
   private _options: any;
   protected _windowResizeSubscription: Subscription;
 
+  // todo: extract unified theme to Directive
   // https://github.com/Microsoft/monaco-editor/issues/338
   // monaco editor is currently not possible to have two editors have different themes.
   private unifiedTheme = "vs-dark";
 
-  @ViewChild('codeEditor') _editorComponent: ElementRef; // 动态添加代码编辑器
+  @ViewChild('codeEditor') _editorComponent: ElementRef;
 
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onInit;
@@ -36,6 +37,7 @@ export abstract class BaseMonacoEditor implements AfterViewInit, OnDestroy {
       this._editor.dispose();
       this.initMonaco(options);
     }
+    
   }
   get options(): any {
     return this._options;

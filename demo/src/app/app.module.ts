@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';  // import FormsModule to make ngM
 import { AngularMonacoEditorConfig, AngularMonacoEditorModule } from 'angular-monaco-editor';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { BaseInitEditorComponent } from './base-init/base-init-editor.component';
 
 import { NavbarComponent } from './navbar/navbar.component';
@@ -31,7 +31,7 @@ const monacoConfig: AngularMonacoEditorConfig = {
           type: "object",
           properties: {
             p1: {
-              enum: ["v1", "v2"]
+              type: "boolean"
             },
             p2: {
               $ref: "http://myserver/bar-schema.json"
@@ -70,9 +70,6 @@ const monacoConfig: AngularMonacoEditorConfig = {
     BrowserModule,
     AngularMonacoEditorModule.forRoot(monacoConfig),
     AppRoutingModule
-  ],
-  providers: [
-    
   ],
   bootstrap: [AppComponent]
 })

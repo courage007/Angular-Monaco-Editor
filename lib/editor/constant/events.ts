@@ -1,3 +1,4 @@
 export const CODE_EDITOR_EVENTS = {
-    onInit: 'onInit'
+    onInit: 'onInit',
+    onBlurEditorText: 'onBlurEditorText',
 };

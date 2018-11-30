@@ -30,6 +30,7 @@ export const CODE_EDITOR_INPUT_VALUE_ACCESSOR: any = {
   providers: [
     CODE_EDITOR_INPUT_VALUE_ACCESSOR,
     CodeEditorEventService,
+    AngularMonacoEditorService,
   ]
 })
 
@@ -47,7 +48,11 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     }
   }
 
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() onBlurEditorText;
+
   private _value = '';
+  private _verifyResut = true; // 记录编辑器校验结果，默认没有错误
 
   // tslint:disable-next-line:max-line-length
   constructor(private angularMonacoEditorService: AngularMonacoEditorService,
@@ -74,15 +79,15 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     if (!enableModel) {
       this._editor.setValue(this._value);
     }
-    
+
     if (enableModel) {
-      this.angularMonacoEditorService.handleModelMarkers();
+      this.handleModelMarkers();
     }
 
     // monaco editor -> outside component
     this._editor.onDidChangeModelContent((e: any) => this.onChangeModelContentHandler(e));
 
-    this._editor.onDidBlurEditorText((e: any) => this.onBlurEditorTextHandler(e));
+    this._editor.onDidBlurEditorText(() => this.onBlurEditorTextHandler());
 
     this._editor.onDidLayoutChange((e: any) => this.onLayoutChangeHandler(e));
 
@@ -96,6 +101,23 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     });
   }
 
+
+
+  handleModelMarkers() {
+    var self = this;
+    // https://github.com/Microsoft/monaco-editor/issues/30
+    const setModelMarkers = monaco.editor.setModelMarkers;
+    monaco.editor.setModelMarkers = function (model, owner, markers) {
+      setModelMarkers.call(monaco.editor, model, owner, markers);
+      if (markers.length === 0) {
+        self._verifyResut = true;
+      } else {
+        // there are errors
+        self._verifyResut = false;
+      }
+    };
+  }
+
   /**
    * refresh layout when resized the window
    */
@@ -105,7 +127,11 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     }
     // fromEvent用于兼听事件，事件触发时，将事件event转成可流动的Observable进行传输
     // https://www.jianshu.com/p/46894deb870a
-    this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this._editor.layout());
+    this._windowResizeSubscription = fromEvent(window, 'resize').subscribe(() => this.resizeEventHandler());
+  }
+
+  private resizeEventHandler() {
+    this._editor.layout(); // relayout
   }
 
   onChangeModelContentHandler(e) {
@@ -116,9 +142,20 @@ export class AngularMonacoEditorComponent extends BaseMonacoEditor implements Co
     this.zone.run(() => this.value = _value); // value is not propagated to parent when executing outside zone.
   }
 
-  onBlurEditorTextHandler(e) {
+  onBlurEditorTextHandler() {
 
     this.onControlTouched();
+
+    // 向外发射BlurEditorText事件，并传递参数
+    this.editorEventService.fireEvent({
+      eventName: CODE_EDITOR_EVENTS.onBlurEditorText,
+      target: this,
+      editor: this._editor,
+      editorState: {
+        verifyResut: this._verifyResut
+      }
+    });
+
   }
 
   onLayoutChangeHandler(e) {

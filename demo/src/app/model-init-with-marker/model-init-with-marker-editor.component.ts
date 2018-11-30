@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularEditorModel } from 'angular-monaco-editor';
-import { AngularMonacoEditorService } from 'angular-monaco-editor';
 
 declare const monaco;
 
@@ -13,7 +12,8 @@ declare const monaco;
     </div>
     
     <div class="editorPanel">
-      <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="jsonCode" [model]="model" (onInit)="onInitHandler($event)"></angular-monaco-editor>
+      <angular-monaco-editor class="customMonacoEditor" [options]="options" [(ngModel)]="jsonCode" [model]="model" (onInit)="onInitHandler($event)" 
+        (onBlurEditorText)="onBlurEditorTextHandler($event)"></angular-monaco-editor>
     </div>
   </div>
   `,
@@ -22,9 +22,6 @@ declare const monaco;
       height: 400px
     }
   `],
-  providers:[
-    // AngularMonacoEditorService
-  ]
 })
 
 export class ModelInitWithMarkerEditorComponent implements OnInit {
@@ -59,7 +56,7 @@ export class ModelInitWithMarkerEditorComponent implements OnInit {
     this._editor = value;
   }
 
-  constructor(private angularMonacoEditorService: AngularMonacoEditorService) {
+  constructor() {
 
   }
 
@@ -70,13 +67,15 @@ export class ModelInitWithMarkerEditorComponent implements OnInit {
   // Add Event Handler
   onInitHandler(event: any) {
     this.editor = event.editor;
-    this.editor.onDidBlurEditorText(() => this.onBlurEditorTextHandler());
   }
 
-  onBlurEditorTextHandler() {
-    if (this.angularMonacoEditorService.existError) {
-      console.log('Focus still on the editor until error is fixed.');
+  onBlurEditorTextHandler($event) {
+    // console.log('失去焦点' + $event);
+    const verfitiedPass = $event.editorState.verifyResut;
+    if (!verfitiedPass) {
       this.editor.focus();
+      console.log('检测出错误');
     }
   }
+
 }
