@@ -53,7 +53,7 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    FormsModule,
+    FormsModule, // Warning: depended module, must be imported
     BrowserModule,
     AngularMonacoEditorModule.forRoot()
   ],
@@ -62,6 +62,7 @@ import { AppComponent } from './app.component';
 })
 export class AppModule { }
 ```
+PS: Please make sure the **'FormsModule'** also be imported when importing the AngularMonacoEditorModule.
 
 - (2) Create Editor options in component.(eg: app.component.ts)
 ```typescript
