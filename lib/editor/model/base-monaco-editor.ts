@@ -98,8 +98,8 @@ export abstract class BaseMonacoEditor implements AfterViewInit, OnDestroy {
   protected abstract initMonaco(options: any): void;
 
   private _updateOptions(options: any) {
-    options.theme = this.unifiedTheme; // 由于多个monaco editor实例会共享一个主题，所以这里将统一设置主题
-    
+    // options.theme = this.unifiedTheme; // 由于多个monaco editor实例会共享一个主题，所以这里将统一设置主题
+
     return options;
   }
 
